@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\LicenceController;
 use App\Http\Controllers\Admin\ReleaseController;
 use App\Http\Controllers\Admin\StaffController;
+use App\Http\Controllers\Admin\TwoFactorController as TwoFactor;
 use App\Http\Controllers\LemonSqueezyWebhookController;
 use App\Http\Controllers\SeoFilesController;
 use App\Http\Controllers\SiteController;
@@ -79,8 +80,13 @@ Route::prefix('admin')->group(function () {
     Route::get('login', [AuthController::class, 'show'])->name('login');
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
-    Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('two-factor', [TwoFactor::class, 'challenge']);
+    Route::post('two-factor', [TwoFactor::class, 'verify'])->middleware('throttle:6,1');
+
+    Route::middleware(['auth', 'admin', 'staff2fa'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('two-factor/setup', [TwoFactor::class, 'setup']);
+        Route::post('two-factor/setup', [TwoFactor::class, 'confirm'])->middleware('throttle:10,1');
         Route::get('/', [StaffController::class, 'overview'])->middleware('can:staff.overview');
         Route::get('search', [StaffController::class, 'search'])->middleware('can:staff.search');
         Route::middleware('can:staff.customers')->group(function () {

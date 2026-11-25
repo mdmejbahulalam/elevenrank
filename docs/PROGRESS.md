@@ -96,3 +96,12 @@
 **Not done (still Phase 4)**
 - Two-factor for staff (spec says required), revoke and reinstate with a reason and confirm modal, reissue key, customer notes and timeline, impersonation, internal notes on tickets, canned replies, assignee, plan feature bullets and preview, release validation report and notes, download counts, Content editor, telemetry, settings and staff management screens, audit filter and export, health checks beyond the current system page, sortable and paginated tables, Ctrl+K shortcut, Playwright journey per role.
 - Not run: browser check, axe.
+
+### Phase 4 continued: staff two-factor (2026-11-25)
+- TOTP (RFC 6238, SHA-1, 6 digits) in `App\Support\Totp`, checked against the RFC test vectors. No outside library.
+- Sign-in: a correct staff password only leads to `/admin/two-factor`; nobody is signed in until a valid code (each time step usable once, plus or minus one step for clock drift) or an unused recovery code is entered. The pending step expires after 5 minutes and is throttled.
+- Enrolment at `/admin/two-factor/setup`: secret shown for copying (and as an `otpauth://` address; **no QR image yet**), confirmed with a code, then 8 one-time recovery codes shown once and stored as SHA-256 hashes. Secret is encrypted at rest. Audit rows: `staff.2fa_enabled`, `staff.signed_in`, `staff.recovery_code_used`.
+- Enforcement: `STAFF_2FA_REQUIRED` (default true, set false in `phpunit.xml` for the older tests). Staff without 2FA can reach only the setup page and sign out.
+- Lost device: `php artisan admin:reset-2fa <email>` (they re-enrol at next sign-in). Migration `add_two_factor_to_users`.
+- Tests: `StaffTwoFactorTest` (7). Total 53 passed, 440 assertions.
+- Not done: QR code, a screen to reset another staff member's 2FA, 2FA for customers (spec lists it as opt-in), a "turn off" action for yourself, remember-this-device.

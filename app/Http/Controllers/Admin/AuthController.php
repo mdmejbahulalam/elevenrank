@@ -20,10 +20,22 @@ class AuthController extends Controller
         $credentials = $request->validate(['email' => ['required', 'email'], 'password' => ['required']]);
 
         // Only staff sign in here; a customer's correct password must not open the admin area.
-        if (! Auth::attempt($credentials + ['is_admin' => true], $request->boolean('remember'))) {
+        $provider = Auth::getProvider();
+        $user = $provider->retrieveByCredentials($credentials + ['is_admin' => true]);
+
+        if (! $user || ! $provider->validateCredentials($user, $credentials)) {
             return back()->withInput($request->only('email'))->withErrors(['email' => 'Those details do not match a staff account.']);
         }
 
+        // With two-factor on, the password only earns a code prompt; nobody is signed in yet.
+        if ($user->two_factor_confirmed_at) {
+            $request->session()->regenerate();
+            $request->session()->put('staff_2fa', ['id' => $user->id, 'remember' => $request->boolean('remember'), 'at' => now()->timestamp]);
+
+            return redirect('/admin/two-factor');
+        }
+
+        Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
         return redirect()->intended('/admin/releases');
