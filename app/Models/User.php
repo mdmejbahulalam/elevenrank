@@ -27,6 +27,8 @@ class User extends Authenticatable
         'staff_note',
     ];
 
+    protected $casts = ['disabled_at' => 'datetime'];
+
     public function licences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Licence::class);

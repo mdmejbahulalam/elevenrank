@@ -64,5 +64,5 @@ Target: shared hosting, PHP 8.2+, no Node. Tick each box on the server.
 
 ## Known gaps (not blockers for a soft launch)
 - Email confirmation for sign-ups is built but not wired.
-- Customer "Disable account" and "Invite staff" are not built.
+- Customer "Disable account" and "Invite staff" are built (invite emails a password-reset link).
 - Some HQ pages were checked by tests only, not compared to the designs.

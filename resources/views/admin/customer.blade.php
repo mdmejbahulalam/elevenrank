@@ -25,7 +25,8 @@
 		</section>
 	</div>
 	<aside class="a-card"><h2>Details</h2>
-		<dl class="h-kv"><dt>Email</dt><dd>{{ $user->email }}</dd><dt>Country</dt><dd>{{ $user->billing_country ?: '—' }}</dd><dt>Joined</dt><dd>{{ $user->created_at->format('j M Y') }}</dd></dl>
+		<dl class="h-kv"><dt>Email</dt><dd>{{ $user->email }}</dd><dt>Country</dt><dd>{{ $user->billing_country ?: '—' }}</dd><dt>Joined</dt><dd>{{ $user->created_at->format('j M Y') }}</dd><dt>Last sign-in</dt><dd>{{ $user->last_login_at?->diffForHumans() ?? 'Never' }}</dd><dt>Account</dt><dd>{{ $user->disabled_at ? 'Disabled' : 'Active' }}</dd></dl>
+		<form method="post" action="/admin/customers/{{ $user->id }}/disable" style="margin-top:16px">@csrf<button class="a-btn secondary sm">{{ $user->disabled_at ? 'Enable account' : 'Disable account' }}</button></form>
 		<form method="post" action="/admin/customers/{{ $user->id }}/note" style="margin-top:16px">@csrf
 			<label class="a-label" for="note" style="margin-top:0">Staff note</label>
 			<textarea id="note" name="staff_note" rows="3" maxlength="1000" placeholder="Only staff see this.">{{ old('staff_note', $user->staff_note) }}</textarea>

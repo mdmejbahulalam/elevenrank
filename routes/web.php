@@ -113,6 +113,7 @@ Route::prefix('admin')->group(function () {
             Route::get('customers', [StaffController::class, 'customers']);
             Route::get('customers/{user}', [StaffController::class, 'customer']);
             Route::post('customers/{user}/note', [StaffController::class, 'saveNote']);
+            Route::post('customers/{user}/disable', [StaffController::class, 'toggleDisabled']);
         });
         Route::get('orders', [StaffController::class, 'orders'])->middleware('can:staff.orders.view');
         Route::get('orders.csv', [StaffController::class, 'ordersCsv'])->middleware('can:staff.orders.view');
@@ -132,6 +133,7 @@ Route::prefix('admin')->group(function () {
         Route::get('audit', [StaffController::class, 'audit'])->middleware('can:staff.audit');
         Route::get('audit.csv', [StaffController::class, 'auditCsv'])->middleware('can:staff.audit');
         Route::get('staff', [StaffController::class, 'staff'])->middleware('can:staff.staff');
+        Route::post('staff', [StaffController::class, 'invite'])->middleware('can:staff.staff');
         Route::get('webhooks', [StaffController::class, 'webhooks'])->middleware('can:staff.webhooks');
         Route::post('webhooks/{event}/retry', [StaffController::class, 'retryWebhook'])->middleware('can:staff.webhooks');
         Route::get('settings', [StaffController::class, 'settings'])->middleware('can:staff.system');

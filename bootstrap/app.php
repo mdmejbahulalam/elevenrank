@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo(fn ($request) => $request->is('admin*') ? '/admin/login' : '/account/login');
         $middleware->validateCsrfTokens(except: ['webhooks/*']);
+        $middleware->web(append: [\App\Http\Middleware\EnsureNotDisabled::class]);
         $middleware->alias(['admin' => \App\Http\Middleware\EnsureAdmin::class, 'staff2fa' => \App\Http\Middleware\EnsureStaffTwoFactor::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

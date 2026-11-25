@@ -75,6 +75,26 @@ class StaffController extends Controller
         return back()->with('status', 'Note saved.');
     }
 
+    public function toggleDisabled(User $user): RedirectResponse
+    {
+        abort_if($user->is_admin, 403);
+        $user->forceFill(['disabled_at' => $user->disabled_at ? null : now()])->save();
+        AuditLog::record($user->disabled_at ? 'customer.disable' : 'customer.enable', $user->email);
+
+        return back()->with('status', $user->disabled_at ? 'Account disabled.' : 'Account enabled.');
+    }
+
+    public function invite(Request $request): RedirectResponse
+    {
+        $data = $request->validate(['name' => ['required', 'string', 'max:120'], 'email' => ['required', 'email', 'unique:users,email'], 'role' => ['required', 'in:'.implode(',', User::ROLES)]]);
+        $user = new User(['name' => $data['name'], 'email' => $data['email'], 'password' => \Illuminate\Support\Str::random(40)]);
+        $user->forceFill(['is_admin' => true, 'role' => $data['role']])->save();
+        \Illuminate\Support\Facades\Password::sendResetLink(['email' => $user->email]);
+        AuditLog::record('staff.invite', $user->email.' as '.$data['role']);
+
+        return back()->with('status', 'Invite sent to '.$user->email.'. They set a password from the email, then sign in at /admin/login.');
+    }
+
     public function orders(Request $request): View
     {
         $status = (string) $request->query('status', '');

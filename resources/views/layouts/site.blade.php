@@ -19,7 +19,9 @@ $nav = [['/features', 'Features', 'features'], ['/pro', 'Pro', 'pro'], ['/pricin
 	<meta property="og:title" content="{{ $pageTitle }}">
 	<meta property="og:description" content="{{ $pageDesc }}">
 	<meta property="og:url" content="{{ $canonical }}">
-	<meta name="twitter:card" content="summary">
+	<meta property="og:image" content="{{ url($ogImage ?? '/brand/social-default.png') }}">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="{{ url($ogImage ?? '/brand/social-default.png') }}">
 	<meta name="twitter:title" content="{{ $pageTitle }}">
 	<meta name="twitter:description" content="{{ $pageDesc }}">
 	<script type="application/ld+json">{!! json_encode($graph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
