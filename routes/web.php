@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\LicenceController;
 use App\Http\Controllers\Admin\ReleaseController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\LemonSqueezyWebhookController;
+use App\Http\Controllers\SeoFilesController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,10 @@ Route::view('docs', 'site.docs');
 Route::view('docs/hooks', 'site.hooks');
 Route::view('changelog', 'site.changelog');
 Route::view('support', 'site.support');
+Route::view('about', 'site.about');
+Route::get('robots.txt', [SeoFilesController::class, 'robots']);
+Route::get('sitemap.xml', [SeoFilesController::class, 'sitemap']);
+Route::get('llms.txt', [SeoFilesController::class, 'llms']);
 Route::get('terms', [SiteController::class, 'terms']);
 Route::get('privacy', [SiteController::class, 'privacy']);
 Route::get('refunds', [SiteController::class, 'refunds']);

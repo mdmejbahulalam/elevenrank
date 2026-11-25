@@ -23,3 +23,12 @@ ul.ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--
 .site-foot h4 { margin: 0 0 8px; font-size: var(--t-12); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .site-foot a { display: block; color: var(--ink); text-decoration: none; padding: 6px 0; } .site-foot a:hover { color: var(--accent); }
 @media (max-width: 640px) { .hero { padding: 48px 0 32px; } }
+.proof { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--surface); padding: 24px 0; }
+.proof .grid > div { display: flex; flex-direction: column; gap: 4px; } .proof strong { font-size: var(--t-16); } .proof span { color: var(--muted); font-size: var(--t-14); }
+ul.chips { list-style: none; padding: 0; margin: 0; display: flex; gap: 10px; flex-wrap: wrap; }
+ul.chips li { padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-weight: 600; }
+ol.steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); counter-reset: s; }
+ol.steps li { counter-increment: s; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; display: flex; flex-direction: column; gap: 6px; }
+ol.steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-dark); display: grid; place-items: center; font-weight: 700; }
+ol.steps span { color: var(--muted); }
+.trust { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 0; padding: 0; list-style: none; } .trust li { padding: 6px 12px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); font-weight: 600; font-size: var(--t-14); }

@@ -19,6 +19,15 @@
 			</div>
 		@endforeach
 	</div>
+	<ul class="trust" aria-label="Our promises"><li>GPL software</li><li>14-day refund</li><li>No lock-in: Pro keeps working after expiry</li></ul>
+	<h2>Free and Pro compared</h2>
+	<x-table :headings="['', 'Free', 'Pro']">
+		<tr><th scope="row">Titles, sitemaps, schema, redirects, 404 monitor</th><td>Included</td><td>Included</td></tr>
+		<tr><th scope="row">Live editor score and importers</th><td>Included</td><td>Included</td></tr>
+		<tr><th scope="row">Site audit and auto-fix queue</th><td>—</td><td>Included</td></tr>
+		<tr><th scope="row">Rank tracker and Search Console figures</th><td>—</td><td>Included</td></tr>
+		<tr><th scope="row">Updates and support</th><td>Community</td><td>For the licence term</td></tr>
+	</x-table>
 	<h2>Questions</h2>
 	<details><summary>Do I need the free plugin?</summary><p>Yes. Pro is an add-on and requires the free ElevenRank plugin to be installed and active.</p></details>
 	<details><summary>What happens when my licence ends?</summary><p>Pro keeps working on your sites. You stop receiving updates and support until you renew.</p></details>

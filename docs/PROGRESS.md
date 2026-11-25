@@ -44,3 +44,17 @@
 - **Not run:** axe, Lighthouse, screenshot grid of all pages in light and dark, dark-mode contrast check, signed-in pages in a browser.
 
 **Not done (carry into Phase 2 to 4):** icon sprite file (icons are inline per use), sortable and paginated table component, tabs, toggle, select and checkbox components, markdown mailables and sending, apple-touch icon and OG image template, porting the marketing pages (Phase 2).
+
+## Phase 2: Marketing site (2026-11-25, partial slice)
+
+**Built**
+- Site layout: unique title and description, canonical, Open Graph and X tags, `Organization` and `WebSite` JSON-LD on every page, `SoftwareApplication` on Home, "Get free plugin" header button (`config/site.php`, `FREE_PLUGIN_URL`).
+- Home rebuilt to the section list: hero with two buttons, proof strip, six feature cards, importer chips (text only), how it works in 3 steps, free vs Pro table, privacy block, FAQ of 6, final CTA.
+- Pricing: trust row and free vs Pro comparison table. About page (owner text slot), branded 404.
+- `robots.txt`, `sitemap.xml` and `llms.txt` served by `SeoFilesController` (the static `public/robots.txt` was removed; admin, account and checkout are disallowed).
+- Tests: `MarketingSeoTest`. Total 31 passed, 268 assertions.
+
+**Not done (still Phase 2)**
+- Product screenshots (need real captures from the dev site), Features sticky nav, Pro four-group layout and "what Pro is not" box driven by Content, Compare pages (need verified facts and dates), Blog, docs sidebar and search, changelog filter, Content store (`resources/content/*.md`), generated OG image, `Product`+`Offer` and `FAQPage` JSON-LD (prices are placeholders), 500 and maintenance pages.
+- Not run: Lighthouse, axe, schema validation, link check, copy honesty review.
+- Placeholders: `FREE_PLUGIN_URL` slug is unconfirmed; About text is a slot.
