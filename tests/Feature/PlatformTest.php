@@ -102,15 +102,17 @@ class PlatformTest extends TestCase
 
     public function test_webhook_is_off_without_a_secret_and_checks_the_signature(): void
     {
-        $this->postJson('/webhooks/lemonsqueezy', [])->assertNotFound();
+        $this->postJson('/webhooks/paddle', [])->assertNotFound();
 
-        config(['services.lemonsqueezy.secret' => 's3cret', 'services.lemonsqueezy.variants' => '{"77":"personal"}']);
-        $body = json_encode(['meta' => ['event_name' => 'subscription_created'], 'data' => ['id' => '9', 'attributes' => ['variant_id' => 77, 'user_email' => 'buyer@example.com', 'user_name' => 'Buyer']]]);
+        config(['services.paddle.secret' => 's3cret', 'services.paddle.prices' => '{"pri_77":"personal"}']);
+        $body = json_encode(['event_type' => 'transaction.completed', 'data' => ['id' => 'txn_9', 'items' => [['price' => ['id' => 'pri_77']]], 'custom_data' => ['email' => 'buyer@example.com', 'name' => 'Buyer']]]);
+        $headers = fn (string $sig) => ['CONTENT_TYPE' => 'application/json', 'HTTP_PADDLE_SIGNATURE' => $sig];
 
-        $this->call('POST', '/webhooks/lemonsqueezy', [], [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_X_SIGNATURE' => 'bad'], $body)->assertUnauthorized();
-        $sig = hash_hmac('sha256', $body, 's3cret');
-        $this->call('POST', '/webhooks/lemonsqueezy', [], [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_X_SIGNATURE' => $sig], $body)->assertOk();
-        $this->call('POST', '/webhooks/lemonsqueezy', [], [], [], ['CONTENT_TYPE' => 'application/json', 'HTTP_X_SIGNATURE' => $sig], $body)->assertOk();
+        $this->call('POST', '/webhooks/paddle', [], [], [], $headers('ts='.time().';h1=bad'), $body)->assertUnauthorized();
+        $ts = time();
+        $sig = "ts={$ts};h1=".hash_hmac('sha256', $ts.':'.$body, 's3cret');
+        $this->call('POST', '/webhooks/paddle', [], [], [], $headers($sig), $body)->assertOk();
+        $this->call('POST', '/webhooks/paddle', [], [], [], $headers($sig), $body)->assertOk();
 
         $this->assertSame(1, Licence::count());
         $this->assertSame('buyer@example.com', Licence::first()->email);

@@ -14,7 +14,7 @@ Last reviewed: 2026-11-25 (Phase 0).
 | Support email address and response time | Support page, email footers | Missing. Do not promise a response time until set |
 | Tax or VAT line and tax IDs | Invoices | Depends on payment provider |
 | Final domain | Emails, canonical URLs, sitemap, `APP_URL` | Presumed `elevenrank.com`, ownership unconfirmed |
-| Payment provider | Checkout, webhooks | Not chosen. Lemon Squeezy adapter exists, off without a secret |
+| Payment provider | Checkout, webhooks | Paddle chosen (Lemon Squeezy is shutting down). Webhook adapter exists, off without PADDLE_WEBHOOK_SECRET; map price ids in PADDLE_PRICES |
 
 ## Content (clearly marked slots, never invented)
 

@@ -36,6 +36,7 @@ class AuthController extends Controller
         }
 
         Auth::login($user, $request->boolean('remember'));
+        $user->forceFill(["last_login_at" => now()])->save();
         $request->session()->regenerate();
 
         return redirect()->intended('/admin/releases');

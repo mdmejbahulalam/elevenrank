@@ -59,7 +59,7 @@ Captured with `php artisan route:list --except-vendor`. 61 routes. The five lice
 | GET | /refunds | SiteController@refunds |  |
 | GET | /support | Illuminate\Routing\ViewController |  |
 | GET | /terms | SiteController@terms |  |
-| POST | /webhooks/lemonsqueezy | LemonSqueezyWebhookController |  |
+| POST | /webhooks/paddle | PaddleWebhookController |  |
 | POST | /wp-json/elevenrank-licence/v1/activate | LicenceApiController@activate |  |
 | POST | /wp-json/elevenrank-licence/v1/check | LicenceApiController@check |  |
 | POST | /wp-json/elevenrank-licence/v1/deactivate | LicenceApiController@deactivate |  |

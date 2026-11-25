@@ -7,6 +7,7 @@ use App\Models\AuditLog;
 use App\Models\Licence;
 use App\Models\Order;
 use App\Models\Plan;
+use App\Models\Setting;
 use App\Models\Ticket;
 use App\Services\Releases;
 use Illuminate\Http\RedirectResponse;
@@ -61,6 +62,8 @@ class DashboardController extends Controller
     {
         $info = $releases->current();
         abort_unless($info && $this->eligible($request), 403);
+
+        Setting::put('downloads.'.$info['version'], (string) ((int) Setting::get('downloads.'.$info['version'], '0') + 1));
 
         return response()->download($info['path'], 'elevenrank-pro.zip', ['Content-Type' => 'application/zip', 'Cache-Control' => 'no-store']);
     }

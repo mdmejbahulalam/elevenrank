@@ -9,7 +9,7 @@ use App\Http\Controllers\Admin\LicenceController;
 use App\Http\Controllers\Admin\ReleaseController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\TwoFactorController as TwoFactor;
-use App\Http\Controllers\LemonSqueezyWebhookController;
+use App\Http\Controllers\PaddleWebhookController;
 use App\Http\Controllers\SeoFilesController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
@@ -49,7 +49,7 @@ Route::get('refunds', [SiteController::class, 'refunds']);
 Route::get('gpl', [SiteController::class, 'gpl']);
 
 // Payment provider webhooks (inactive until configured)
-Route::post('webhooks/lemonsqueezy', LemonSqueezyWebhookController::class)->middleware('throttle:60,1');
+Route::post('webhooks/paddle', PaddleWebhookController::class)->middleware('throttle:60,1');
 
 // Customer account
 Route::prefix('account')->group(function () {
@@ -121,6 +121,7 @@ Route::prefix('admin')->group(function () {
         Route::post('orders/{order:number}/receipt', [StaffController::class, 'resendReceipt'])->middleware('can:staff.orders.view');
         Route::middleware('can:staff.plans')->group(function () {
             Route::get('plans', [StaffController::class, 'plans']);
+            Route::post('plans', [StaffController::class, 'storePlan']);
             Route::post('plans/{plan}', [StaffController::class, 'updatePlan']);
         });
         Route::middleware('can:staff.tickets')->group(function () {
@@ -129,6 +130,11 @@ Route::prefix('admin')->group(function () {
             Route::post('tickets/{ticket}/reply', [StaffController::class, 'replyTicket']);
         });
         Route::get('audit', [StaffController::class, 'audit'])->middleware('can:staff.audit');
+        Route::get('staff', [StaffController::class, 'staff'])->middleware('can:staff.staff');
+        Route::get('webhooks', [StaffController::class, 'webhooks'])->middleware('can:staff.webhooks');
+        Route::post('webhooks/{event}/retry', [StaffController::class, 'retryWebhook'])->middleware('can:staff.webhooks');
+        Route::get('settings', [StaffController::class, 'settings'])->middleware('can:staff.system');
+        Route::post('settings', [StaffController::class, 'saveSettings'])->middleware('can:staff.system');
         Route::middleware('can:staff.system')->group(function () {
             Route::get('system', [StaffController::class, 'system']);
             Route::post('system', [StaffController::class, 'runSystem']);
@@ -144,6 +150,7 @@ Route::prefix('admin')->group(function () {
         });
         Route::middleware('can:staff.releases')->group(function () {
             Route::get('releases', [ReleaseController::class, 'index']);
+            Route::get('releases/new', [ReleaseController::class, 'create']);
             Route::post('releases', [ReleaseController::class, 'store']);
             Route::post('releases/restore', [ReleaseController::class, 'restore']);
         });

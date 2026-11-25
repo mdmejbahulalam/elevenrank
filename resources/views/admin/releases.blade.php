@@ -1,36 +1,16 @@
 @extends('layouts.admin')
 @section('title', 'Pro releases')
 @section('content')
-<h1>Pro releases</h1>
-@if (session('status')) <x-alert tone="ok">{{ session('status') }}</x-alert> @endif
-
-<x-card title="Serving" style="margin-bottom:16px">
-	<p>@if ($current) Customers receive version <strong>{{ $current }}</strong>. @else <span class="muted">Nothing published yet.</span> @endif</p>
-</x-card>
-
-<x-card title="Publish a release" style="margin-bottom:16px">
-	<form method="post" action="/admin/releases" enctype="multipart/form-data">
-		@csrf
-		<label for="f-zip">elevenrank-pro.zip</label>
-		<input id="f-zip" type="file" name="zip" accept=".zip" required @error('zip') aria-invalid="true" aria-describedby="e-zip" @enderror>
-		@error('zip') <div class="field-error" id="e-zip" role="alert">{{ $message }}</div> @enderror
-		<div class="row" style="margin-top:16px">
-			<label style="margin:0;font-weight:400"><input type="checkbox" name="allow_older" value="1"> Allow an older version</label>
-			<x-button>Publish release</x-button>
-		</div>
-	</form>
-	<p class="muted">The zip must contain <code>elevenrank-pro/elevenrank-pro.php</code>, and its Version header must match <code>ELEVENRANK_PRO_VERSION</code>.</p>
-</x-card>
-
-@if ($history)
-<x-card title="Roll back">
-	<form method="post" action="/admin/releases/restore">
-		@csrf
-		<label for="f-version">Version</label>
-		<select id="f-version" name="version">@foreach ($history as $v) <option value="{{ $v }}">{{ $v }}</option> @endforeach</select>
-		@error('version') <div class="field-error" role="alert">{{ $message }}</div> @enderror
-		<div class="row" style="margin-top:16px"><x-button>Make current</x-button></div>
-	</form>
-</x-card>
+<div class="a-between" style="align-items:flex-start;margin-bottom:24px"><div><p class="a-eyebrow">Releases</p><h1 style="margin:0">Pro releases</h1></div><a class="a-btn primary" href="/admin/releases/new">Upload release</a></div>
+@error('version')<div class="a-alert bad" style="margin-bottom:16px"><div>{{ $message }}</div></div>@enderror
+@if (empty($rows))<x-card><x-empty icon="key" title="Nothing published yet.">Upload the first Pro zip to start serving updates.</x-empty></x-card>
+@else
+<x-table :headings="['Version', 'Released', 'Channel', 'Downloads', 'Status']">
+@foreach ($rows as $r)
+	<tr><td><strong>{{ $r['version'] }}</strong></td><td>{{ $r['released'] }}</td><td>Stable</td><td>{{ $r['downloads'] }}</td>
+		<td>@if ($r['current'])<span class="a-pill ok">Published</span>@else<form method="post" action="/admin/releases/restore" style="margin:0;display:flex;gap:8px;align-items:center"><span class="a-pill">Older</span>@csrf<input type="hidden" name="version" value="{{ $r['version'] }}"><button class="a-btn secondary sm">Make current</button></form>@endif</td></tr>
+@endforeach
+</x-table>
 @endif
+<p class="a-muted" style="margin-top:8px">Customers inside their term receive the published version. Downloads are counted from the Account page.</p>
 @endsection

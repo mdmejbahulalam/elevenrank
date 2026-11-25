@@ -16,7 +16,7 @@
 
 **Open questions for the owner**
 1. Confirm plan names, site counts and prices.
-2. Payment provider: Lemon Squeezy, Paddle or Stripe?
+2. Payment provider: decided, Paddle. Still needs a Paddle account, price ids and the checkout wired (the webhook is done).
 3. Is `elevenrank.com` owned; final product name?
 4. Support channel: tickets, email, or both; response time to promise?
 5. Telemetry: none or opt-in?

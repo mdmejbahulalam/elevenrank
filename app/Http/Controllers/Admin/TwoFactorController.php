@@ -36,7 +36,8 @@ class TwoFactorController extends Controller
         }
 
         $request->session()->forget('staff_2fa');
-        Auth::login($user, $pending['remember']);
+        Auth::login($user, $pending["remember"]);
+        $user->forceFill(["last_login_at" => now()])->save();
         $request->session()->regenerate();
         AuditLog::record('staff.signed_in');
 

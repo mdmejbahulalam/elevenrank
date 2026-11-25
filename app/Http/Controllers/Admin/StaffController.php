@@ -167,6 +167,21 @@ class StaffController extends Controller
         return view('admin.plans', ['plans' => Plan::orderBy('sort')->get()]);
     }
 
+    public function storePlan(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:80'], 'sites' => ['required', 'integer', 'min:0', 'max:1000'],
+            'price' => ['required', 'numeric', 'min:0', 'max:100000'], 'months' => ['required', 'integer', 'min:0', 'max:120'],
+        ]);
+        $slug = \Illuminate\Support\Str::slug($data['name']) ?: 'plan';
+        $slug = Plan::where('slug', $slug)->exists() ? $slug.'-'.\Illuminate\Support\Str::lower(\Illuminate\Support\Str::random(4)) : $slug;
+        Plan::create(['slug' => $slug, 'name' => $data['name'], 'sites' => (int) $data['sites'], 'months' => (int) $data['months'],
+            'price_cents' => (int) round($data['price'] * 100), 'currency' => 'USD', 'active' => $request->boolean('active'), 'sort' => (int) Plan::max('sort') + 1]);
+        AuditLog::record('plan.created', $slug);
+
+        return back()->with('status', $data['name'].' added.');
+    }
+
     public function updatePlan(Request $request, Plan $plan): RedirectResponse
     {
         $data = $request->validate([
@@ -214,12 +229,70 @@ class StaffController extends Controller
         return view('admin.audit', ['logs' => AuditLog::with('user')->latest('id')->limit(200)->get()]);
     }
 
+    public function staff(): View
+    {
+        $roles = ['super_admin' => 'Super admin', 'support' => 'Support', 'finance' => 'Finance'];
+        $areas = [
+            'Customers and licences' => ['staff.customers'],
+            'Orders and refunds' => ['staff.orders.settle', 'staff.orders.view'],
+            'Tickets' => ['staff.tickets'],
+            'Releases and plans' => ['staff.releases', 'staff.plans'],
+            'Staff, webhooks, settings' => ['staff.staff'],
+        ];
+        $matrix = [];
+        foreach ($areas as $label => $abilities) {
+            foreach (array_keys($roles) as $role) {
+                $can = fn ($a) => $role === 'super_admin' || in_array($role, \App\Providers\AppServiceProvider::ABILITIES[$a], true);
+                $matrix[$label][$role] = match (true) {
+                    $label === 'Orders and refunds' => $can('staff.orders.settle') ? 'Edit' : ($can('staff.orders.view') ? 'View' : 'None'),
+                    $label === 'Releases and plans' => $can('staff.releases') ? 'Edit' : ($can('staff.plans') ? 'Plans only' : 'None'),
+                    default => $can($abilities[0]) ? 'Edit' : 'None',
+                };
+            }
+        }
+
+        return view('admin.staff', ['staff' => User::where('is_admin', true)->orderBy('id')->get(), 'roles' => $roles, 'matrix' => $matrix]);
+    }
+
+    public function settings(): View
+    {
+        return view('admin.settings', [
+            'seller' => \App\Models\Setting::get('seller_name', ''), 'support' => \App\Models\Setting::get('support_email', ''),
+            'refund' => \App\Models\Setting::get('refund_days', '14'), 'provider' => config('services.paddle.secret') ? 'Paddle' : null,
+        ]);
+    }
+
+    public function saveSettings(Request $request): RedirectResponse
+    {
+        $d = $request->validate(['seller_name' => ['nullable', 'string', 'max:120'], 'support_email' => ['nullable', 'email', 'max:190'], 'refund_days' => ['required', 'integer', 'min:0', 'max:365']]);
+        foreach ($d as $k => $v) {
+            \App\Models\Setting::put($k, $v === null ? '' : (string) $v);
+        }
+        AuditLog::record('settings.saved');
+
+        return back()->with('status', 'Settings saved.');
+    }
+
+    public function webhooks(): View
+    {
+        return view('admin.webhooks', ['events' => \App\Models\WebhookEvent::latest('id')->limit(100)->get()]);
+    }
+
+    public function retryWebhook(\App\Models\WebhookEvent $event, Fulfilment $fulfilment): RedirectResponse
+    {
+        abort_unless($event->status === 'failed', 422);
+        app(\App\Http\Controllers\PaddleWebhookController::class)->run($event, $fulfilment);
+        AuditLog::record('webhook.retried', $event->event);
+
+        return back()->with('status', $event->fresh()->status === 'processed' ? 'Event processed.' : 'Still failing: '.$event->fresh()->error);
+    }
+
     public function system(): View
     {
         return view('admin.system', [
             'php' => PHP_VERSION, 'laravel' => app()->version(), 'env' => app()->environment(),
             'mail' => config('mail.default'), 'db' => config('database.default'),
-            'provider' => config('services.lemonsqueezy.secret') ? 'Lemon Squeezy webhook configured' : 'Manual (staff mark orders paid)',
+            'provider' => config('services.paddle.secret') ? 'Paddle webhook configured' : 'Manual (staff mark orders paid)',
         ]);
     }
 
