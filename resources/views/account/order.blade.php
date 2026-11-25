@@ -13,5 +13,12 @@
 	@elseif ($order->status === 'refunded')
 		<p>Refunded {{ $order->refunded_at?->format('j M Y') }}. The licence key has been switched off.</p>
 	@endif
+	@if ($order->status !== 'pending')
+		<p style="margin-top:12px"><x-button href="/account/orders/{{ $order->number }}/invoice" variant="secondary">View invoice</x-button></p>
+	@endif
+	@if ($order->status === 'paid' && $order->paid_at && $order->paid_at->gte(now()->subDays(14)))
+		<form method="post" action="/account/orders/{{ $order->number }}/refund" style="margin-top:12px">@csrf<button class="link">Request a refund</button> <span class="muted">(within 14 days)</span></form>
+	@endif
+	@error('refund')<div class="field-error" role="alert">{{ $message }}</div>@enderror
 </x-card>
 @endsection

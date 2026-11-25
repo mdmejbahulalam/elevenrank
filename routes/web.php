@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Account\AuthController as AccountAuth;
 use App\Http\Controllers\Account\DashboardController as Account;
+use App\Http\Controllers\Account\PasswordResetController as PasswordReset;
+use App\Http\Controllers\Account\SelfServiceController as SelfService;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\LicenceController;
 use App\Http\Controllers\Admin\ReleaseController;
@@ -39,6 +41,10 @@ Route::prefix('account')->group(function () {
         Route::post('login', [AccountAuth::class, 'authenticate'])->middleware('throttle:10,1');
         Route::get('register', [AccountAuth::class, 'register']);
         Route::post('register', [AccountAuth::class, 'store'])->middleware('throttle:10,1');
+        Route::get('forgot-password', [PasswordReset::class, 'request']);
+        Route::post('forgot-password', [PasswordReset::class, 'send'])->middleware('throttle:5,1');
+        Route::get('reset-password/{token}', [PasswordReset::class, 'form'])->name('password.reset');
+        Route::post('reset-password', [PasswordReset::class, 'reset'])->middleware('throttle:10,1');
     });
 
     Route::middleware('auth')->group(function () {
@@ -50,6 +56,10 @@ Route::prefix('account')->group(function () {
         Route::get('download', [Account::class, 'download'])->middleware('throttle:20,1');
         Route::get('orders', [Account::class, 'orders']);
         Route::get('orders/{order:number}', [Account::class, 'order']);
+        Route::get('orders/{order:number}/invoice', [SelfService::class, 'invoice']);
+        Route::post('orders/{order:number}/refund', [SelfService::class, 'requestRefund']);
+        Route::post('licences/{licence}/label', [SelfService::class, 'renameLicence']);
+        Route::get('export', [SelfService::class, 'export'])->middleware('throttle:5,1');
         Route::get('tickets', [Account::class, 'tickets']);
         Route::post('tickets', [Account::class, 'storeTicket']);
         Route::get('tickets/{ticket}', [Account::class, 'ticket']);

@@ -7,6 +7,7 @@
 	<form method="post" action="/account/tickets">
 		@csrf
 		<x-field name="subject" label="Subject" maxlength="160" required />
+		<x-field name="site" label="Site address (optional)" maxlength="190" help="The site this is about, for example example.com." />
 		<x-field name="body" label="How can we help?" :rows="5" maxlength="5000" required />
 		<x-button style="margin-top:16px">Send</x-button>
 	</form>

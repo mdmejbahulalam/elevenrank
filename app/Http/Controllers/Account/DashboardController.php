@@ -27,6 +27,7 @@ class DashboardController extends Controller
             'licences' => $user->licences()->withCount('activations')->latest('id')->get(),
             'orders' => $user->orders()->with('plan')->latest('id')->limit(3)->get(),
             'tickets' => $user->tickets()->where('status', '!=', 'closed')->count(),
+            'hasSite' => $user->licences()->whereHas('activations')->exists(),
         ]);
     }
 
@@ -45,7 +46,14 @@ class DashboardController extends Controller
 
     public function downloads(Request $request, Releases $releases): View
     {
-        return view('account.downloads', ['release' => $releases->current(), 'eligible' => $this->eligible($request)]);
+        $release = $releases->current();
+        $eligible = $this->eligible($request);
+        if ($release) {
+            $release['size'] = number_format(filesize($release['path']) / 1048576, 2).' MB';
+            $release['sha256'] = hash_file('sha256', $release['path']);
+        }
+
+        return view('account.downloads', ['release' => $release, 'eligible' => $eligible, 'history' => $eligible ? $releases->history() : []]);
     }
 
     public function download(Request $request, Releases $releases): BinaryFileResponse
@@ -126,9 +134,10 @@ class DashboardController extends Controller
 
     public function storeTicket(Request $request): RedirectResponse
     {
-        $data = $request->validate(['subject' => ['required', 'string', 'max:160'], 'body' => ['required', 'string', 'max:5000']]);
+        $data = $request->validate(['subject' => ['required', 'string', 'max:160'], 'body' => ['required', 'string', 'max:5000'], 'site' => ['nullable', 'string', 'max:190']]);
         $ticket = $request->user()->tickets()->create(['subject' => $data['subject']]);
-        $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => false, 'body' => $data['body']]);
+        $body = ! empty($data['site']) ? 'Site: '.$data['site']."\n\n".$data['body'] : $data['body'];
+        $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => false, 'body' => $body]);
 
         return redirect('/account/tickets/'.$ticket->id)->with('status', 'Ticket opened. We will reply here.');
     }

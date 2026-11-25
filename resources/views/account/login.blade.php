@@ -10,5 +10,5 @@
 		<p style="margin-top:20px"><x-button class="block">Sign in</x-button></p>
 	</form>
 </x-card>
-<p>New here? <a href="/account/register">Create an account</a>.</p>
+<p>New here? <a href="/account/register">Create an account</a>. <a href="/account/forgot-password">Forgot your password?</a></p>
 @endsection

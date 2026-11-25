@@ -7,6 +7,15 @@
 	<x-stat label="Licences on this account" :value="$licences->count()" />
 	<x-stat label="Open tickets" :value="$tickets" />
 </div>
+@if ($licences->isNotEmpty())
+<x-card title="Install Pro in 3 steps" style="margin-bottom:16px">
+	<ol class="checklist">
+		<li><a href="/account/downloads">Download Pro</a> and upload it next to the free plugin.</li>
+		<li>Open ElevenRank &gt; Pro licence and paste your key.</li>
+		<li>@if ($hasSite) <x-badge tone="ok">Done</x-badge> @endif Activate it: your first site appears under <a href="/account/licences">Licences</a>.</li>
+	</ol>
+</x-card>
+@endif
 @if ($licences->isEmpty())
 	<x-card><x-empty icon="key" title="No licence yet">Pro unlocks the audit, rank tracker and more. <a href="/pricing">See pricing</a>.</x-empty></x-card>
 @else

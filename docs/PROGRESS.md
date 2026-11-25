@@ -63,3 +63,17 @@
 - Features: sticky in-page nav with anchors. Pro: the 15 features in four groups (On-page, Crawl control, Analysis, Launch safety) and a "What Pro is not (yet)" box read from `config/site.php` (`pro_version`, `pro_status`). Docs: sidebar and client-side search with a no-result message, "last updated" line. Changelog: filter by product (`?product=free|pro`) and an anchor per version.
 - Tests: 32 passed, 281 assertions. Site CSS 12.3 KB (3.5 KB gzip).
 - Still open in Phase 2: product screenshots, Compare pages, Blog, Content store, generated OG image, docs split into `/docs/{slug}` pages with prev/next, Lighthouse, axe, schema validation, link check.
+
+## Phase 3: Customer dashboard (2026-11-25, partial slice)
+
+**Built**
+- Forgot and reset password (`/account/forgot-password`, `/account/reset-password/{token}`): same answer whether or not the address exists, throttled, link in the sign-in page. Mail goes through the configured driver (`log` until a real one is set).
+- Downloads: size, SHA-256, requirements, earlier versions list for eligible customers.
+- Orders: print-ready invoice view (`/account/orders/{number}/invoice`, seller and tax lines are marked placeholders), "Request a refund" for paid orders inside 14 days (opens a ticket and writes an audit row; staff still refund in the Staff area).
+- Licences: label (migration `add_label_to_licences`). Overview: "Install Pro in 3 steps" checklist that ticks when a first site activates.
+- Support: optional site address on new tickets. Profile: "Export my data" (JSON of account, orders, licences with keys, tickets), throttled.
+- Tests: `CustomerDashboardTest`. Total 35 passed, 307 assertions.
+
+**Not done (still Phase 3)**
+- Email verification, two-factor, active sessions, delete account, billing name/address/tax ID, renewal and cancel-renewal, ticket attachments and unread marker, ticket tied to a licence (site address is free text), seat meter and reveal/mask on keys, loading and error states, sending the Phase 1 email templates (receipts, key delivery), Playwright journey.
+- Not run: browser check of new pages, axe.

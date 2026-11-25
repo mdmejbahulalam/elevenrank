@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Licence extends Model
 {
-    protected $fillable = ['license_key', 'email', 'site_limit', 'expires', 'status', 'order_ref', 'user_id', 'plan_id'];
+    protected $fillable = ['license_key', 'email', 'site_limit', 'expires', 'status', 'order_ref', 'user_id', 'plan_id', 'label'];
 
     protected function casts(): array
     {
