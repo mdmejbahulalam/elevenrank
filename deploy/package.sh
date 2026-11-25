@@ -17,7 +17,7 @@ tar -C "$root" \
 mkdir -p "$stage/storage/framework/"{cache,sessions,views} "$stage/storage/logs" "$stage/bootstrap/cache"
 
 rm -f "$out/elevenrank-platform.zip"
-(cd "$stage" && tar -a -cf "$out/elevenrank-platform.zip" .)
+php "$root/deploy/zip.php" "$stage" "$(cd "$out" && pwd -W 2>/dev/null || pwd)/elevenrank-platform.zip"
 rm -rf "$stage"
 
 ls -l "$out/elevenrank-platform.zip"
