@@ -1,6 +1,7 @@
 @extends('layouts.site')
 @section('title', 'Pricing')
 @section('description', 'ElevenRank Pro annual licences for 1, 3 or 10 sites. The free plugin stays free.')
+@php $ogImage = '/brand/social-pro.png'; @endphp
 @section('content')
 <section class="s-sec" style="padding-bottom:48px">
 	<div class="s-wrap">

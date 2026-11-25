@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Services\Notifier;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -46,9 +48,31 @@ class AuthController extends Controller
         $user = User::create($data); // is_admin is not fillable and defaults to false.
         Auth::login($user);
         $request->session()->regenerate();
-        app(\App\Services\Notifier::class)->welcome($user);
+        app(Notifier::class)->welcome($user);
+        $this->sendVerification($user);
 
         return redirect()->intended('/account');
+    }
+
+    private function sendVerification(User $user): void
+    {
+        if (config('services.verify_email') && ! $user->email_verified_at) {
+            app(Notifier::class)->verify($user, URL::temporarySignedRoute('account.verify', now()->addDay(), ['user' => $user->id]));
+        }
+    }
+
+    public function verify(Request $request, User $user): RedirectResponse
+    {
+        $user->forceFill(['email_verified_at' => $user->email_verified_at ?? now()])->save();
+
+        return redirect(Auth::check() ? '/account' : '/account/login')->with('status', 'Email confirmed.');
+    }
+
+    public function resend(Request $request): RedirectResponse
+    {
+        $this->sendVerification($request->user());
+
+        return back()->with('status', 'Confirmation email sent.');
     }
 
     public function logout(Request $request): RedirectResponse

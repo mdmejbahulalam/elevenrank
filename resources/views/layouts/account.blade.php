@@ -25,6 +25,7 @@
 	</nav>
 	<main id="main" class="a-main">
 		@if (session('status'))<div class="flash" role="status">{{ session('status') }}</div>@endif
+		@if (config('services.verify_email') && ! auth()->user()?->email_verified_at)<div class="flash" role="status">Confirm your email to keep your account secure. <form method="post" action="/account/verify/resend" style="display:inline">@csrf<button style="background:none;border:0;padding:0;text-decoration:underline;cursor:pointer;color:inherit;font:inherit">Send the email again</button></form></div>@endif
 		@yield('body')
 	</main>
 </div>

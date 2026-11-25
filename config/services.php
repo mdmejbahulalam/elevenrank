@@ -28,6 +28,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'verify_email' => (bool) env('VERIFY_EMAIL', false),
+
     'paddle' => [
         'secret' => env('PADDLE_WEBHOOK_SECRET'),
         'prices' => env('PADDLE_PRICES', '{}'),

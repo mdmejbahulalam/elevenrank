@@ -2,12 +2,13 @@
 @section('title', 'Developer hooks')
 @section('description', 'Public actions and filters in ElevenRank for building add-ons and customising output.')
 @section('content')
-<div class="wrap page">
-	<h1>Developer hooks</h1>
-	<p class="sub">Public actions and filters. Anything not listed here is internal and may change.</p>
+<section class="s-sec"><div class="s-wrap">
+	<p class="s-eyebrow">Docs</p>
+	<h1 class="s-d-xl" style="font-size:clamp(36px,5vw,44px)">Developer hooks</h1>
+	<p class="s-lead">Public actions and filters. Anything not listed here is internal and may change.</p>
 
-	<h2>Actions</h2>
-	<table>
+	<h2 style="margin:40px 0 16px">Actions</h2>
+	<div class="s-table-wrap"><table class="s-table">
 		<thead><tr><th>Hook</th><th>Arguments</th><th>Fires</th></tr></thead>
 		<tbody>
 		@foreach ([
@@ -19,10 +20,10 @@
 			<tr><td><code>{{ $h }}</code></td><td><code>{{ $a }}</code></td><td>{{ $d }}</td></tr>
 		@endforeach
 		</tbody>
-	</table>
+	</table></div>
 
-	<h2>Filters</h2>
-	<table>
+	<h2 style="margin:40px 0 16px">Filters</h2>
+	<div class="s-table-wrap"><table class="s-table">
 		<thead><tr><th>Hook</th><th>Arguments</th><th>Purpose</th></tr></thead>
 		<tbody>
 		@foreach ([
@@ -48,7 +49,7 @@
 			<tr><td><code>{{ $h }}</code></td><td><code>{{ $a }}</code></td><td>{{ $d }}</td></tr>
 		@endforeach
 		</tbody>
-	</table>
-	<p class="muted" style="margin-top:16px">This page is a summary; the plugin repository holds the full reference.</p>
-</div>
+	</table></div>
+	<p style="margin-top:16px;color:var(--muted)">This page is a summary; the plugin repository holds the full reference.</p>
+</div></section>
 @endsection

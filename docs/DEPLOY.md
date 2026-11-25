@@ -63,6 +63,6 @@ Target: shared hosting, PHP 8.2+, no Node. Tick each box on the server.
 - [ ] Check HQ, Webhooks for failed events and retry them
 
 ## Known gaps (not blockers for a soft launch)
-- Email confirmation for sign-ups is built but not wired.
+- Email confirmation is built and off by default: set `VERIFY_EMAIL=true` to send the link and show a banner (it does not block the account).
 - Customer "Disable account" and "Invite staff" are built (invite emails a password-reset link).
 - Some HQ pages were checked by tests only, not compared to the designs.

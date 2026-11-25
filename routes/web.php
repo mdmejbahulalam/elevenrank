@@ -64,8 +64,11 @@ Route::prefix('account')->group(function () {
         Route::post('reset-password', [PasswordReset::class, 'reset'])->middleware('throttle:10,1');
     });
 
+    Route::get('verify/{user}', [AccountAuth::class, 'verify'])->name('account.verify')->middleware(['signed', 'throttle:20,1']);
+
     Route::middleware('auth')->group(function () {
         Route::post('logout', [AccountAuth::class, 'logout']);
+        Route::post('verify/resend', [AccountAuth::class, 'resend'])->middleware('throttle:3,1');
         Route::get('/', [Account::class, 'overview']);
         Route::get('licences', [Account::class, 'licences']);
         Route::post('licences/{licence}/deactivate', [Account::class, 'deactivateSite']);
