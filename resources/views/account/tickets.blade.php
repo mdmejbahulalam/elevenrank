@@ -2,22 +2,18 @@
 @section('page', 'Support')
 @section('body')
 <h1>Support</h1>
-<div class="card" style="margin-bottom:20px">
+<x-card style="margin-bottom:20px">
 	<h3>Open a ticket</h3>
 	<form method="post" action="/account/tickets">
 		@csrf
-		<label for="subject">Subject</label>
-		<input id="subject" type="text" name="subject" value="{{ old('subject') }}" maxlength="160" required>
-		@error('subject') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<label for="body">How can we help?</label>
-		<textarea id="body" name="body" rows="5" maxlength="5000" required>{{ old('body') }}</textarea>
-		@error('body') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<p><button class="btn">Send</button></p>
+		<x-field name="subject" label="Subject" maxlength="160" required />
+		<x-field name="body" label="How can we help?" :rows="5" maxlength="5000" required />
+		<x-button style="margin-top:16px">Send</x-button>
 	</form>
-</div>
+</x-card>
 <h2>Your tickets</h2>
 @forelse ($tickets as $t)
-	<p><a href="/account/tickets/{{ $t->id }}">{{ $t->subject }}</a> · {{ $t->status }} · {{ $t->updated_at->format('j M Y') }}</p>
+	<p><a href="/account/tickets/{{ $t->id }}">{{ $t->subject }}</a> · <x-status :value="$t->status" /> · {{ $t->updated_at->format('j M Y') }}</p>
 @empty
 	<p class="muted">No tickets yet.</p>
 @endforelse

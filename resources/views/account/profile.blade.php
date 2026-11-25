@@ -2,25 +2,16 @@
 @section('page', 'Profile')
 @section('body')
 <h1>Profile</h1>
-<div class="card">
+<x-card>
 	<form method="post" action="/account/profile">
 		@csrf
-		<label for="name">Name</label>
-		<input id="name" type="text" name="name" value="{{ old('name', auth()->user()->name) }}" required>
-		@error('name') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<label for="email">Email</label>
-		<input id="email" type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required>
-		@error('email') <p class="err" role="alert">{{ $message }}</p> @enderror
+		<x-field name="name" label="Name" :value="auth()->user()->name" required />
+		<x-field name="email" type="email" label="Email" :value="auth()->user()->email" required />
 		<h3 style="margin-top:22px">Change password</h3>
-		<label for="current_password">Current password</label>
-		<input id="current_password" type="password" name="current_password" autocomplete="current-password">
-		@error('current_password') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<label for="password">New password (10 characters or more)</label>
-		<input id="password" type="password" name="password" autocomplete="new-password">
-		@error('password') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<label for="password_confirmation">Repeat new password</label>
-		<input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password">
-		<p><button class="btn">Save</button></p>
+		<x-field name="current_password" type="password" label="Current password" autocomplete="current-password" />
+		<x-field name="password" type="password" label="New password (10 characters or more)" autocomplete="new-password" />
+		<x-field name="password_confirmation" type="password" label="Repeat new password" autocomplete="new-password" />
+		<x-button style="margin-top:20px">Save</x-button>
 	</form>
-</div>
+</x-card>
 @endsection

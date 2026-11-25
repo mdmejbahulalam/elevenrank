@@ -3,15 +3,12 @@
 @section('body')
 <h1>Orders</h1>
 @if ($orders->isEmpty())
-	<p>No orders yet. <a href="/pricing">See pricing</a>.</p>
+	<x-card><x-empty icon="receipt" title="No orders yet."><a href="/pricing">See pricing</a>.</x-empty></x-card>
 @else
-	<table style="width:100%;border-collapse:collapse">
-		<thead><tr><th align="left">Order</th><th align="left">Plan</th><th align="left">Amount</th><th align="left">Status</th><th align="left">Date</th></tr></thead>
-		<tbody>
+	<x-table :headings="['Order', 'Plan', 'Amount', 'Status', 'Date']">
 		@foreach ($orders as $o)
-			<tr><td><a href="/account/orders/{{ $o->number }}">{{ $o->number }}</a></td><td>{{ $o->plan->name }}</td><td>{{ $o->amount() }}</td><td>{{ $o->status }}</td><td>{{ $o->created_at->format('j M Y') }}</td></tr>
+			<tr><td><a href="/account/orders/{{ $o->number }}">{{ $o->number }}</a></td><td>{{ $o->plan->name }}</td><td>{{ $o->amount() }}</td><td><x-status :value="$o->status" /></td><td>{{ $o->created_at->format('j M Y') }}</td></tr>
 		@endforeach
-		</tbody>
-	</table>
+	</x-table>
 @endif
 @endsection

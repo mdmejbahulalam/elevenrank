@@ -2,9 +2,9 @@
 @section('page', 'Order')
 @section('body')
 <h1>Order {{ $order->number }}</h1>
-<div class="card">
+<x-card>
 	<p><strong>{{ $order->plan->name }}</strong> · {{ $order->plan->sitesLabel() }} · {{ $order->plan->months }} months</p>
-	<p>Amount: {{ $order->amount() }} · Placed {{ $order->created_at->format('j M Y') }} · Status: <strong>{{ $order->status }}</strong></p>
+	<p>Amount: {{ $order->amount() }} · Placed {{ $order->created_at->format('j M Y') }} · Status: <x-status :value="$order->status" /></p>
 	@if ($order->status === 'pending')
 		<p>We have your order. Payment is being finalised, and we will send payment instructions to {{ auth()->user()->email }}. Your licence key appears here as soon as the payment is confirmed.</p>
 	@elseif ($order->status === 'paid' && $order->licence)
@@ -13,5 +13,5 @@
 	@elseif ($order->status === 'refunded')
 		<p>Refunded {{ $order->refunded_at?->format('j M Y') }}. The licence key has been switched off.</p>
 	@endif
-</div>
+</x-card>
 @endsection

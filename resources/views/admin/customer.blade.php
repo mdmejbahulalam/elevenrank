@@ -3,14 +3,14 @@
 @section('content')
 <h1>{{ $user->name }}</h1>
 <p class="muted">{{ $user->email }} · joined {{ $user->created_at->format('Y-m-d') }}</p>
-<div class="card" style="overflow-x:auto"><h2>Licences</h2>
+<x-card title="Licences">
 @forelse ($licences as $l)
-	<p><code>{{ $l->license_key }}</code> · {{ $l->activations_count }} / {{ $l->site_limit ?: '∞' }} sites · {{ $l->status }} · {{ $l->expires?->format('Y-m-d') ?? 'never' }}</p>
+	<p><code>{{ $l->license_key }}</code> · {{ $l->activations_count }} / {{ $l->site_limit ?: '∞' }} sites · <x-status :value="$l->status" /> · {{ $l->expires?->format('Y-m-d') ?? 'never' }}</p>
 @empty <p class="muted">None.</p> @endforelse
-</div>
-<div class="card" style="overflow-x:auto"><h2>Orders</h2>
+</x-card>
+<x-card title="Orders" style="margin-top:16px">
 @forelse ($orders as $o)
-	<p>{{ $o->number }} · {{ $o->plan->name }} · {{ $o->amount() }} · {{ $o->status }} · {{ $o->created_at->format('Y-m-d') }}</p>
+	<p>{{ $o->number }} · {{ $o->plan->name }} · {{ $o->amount() }} · <x-status :value="$o->status" /> · {{ $o->created_at->format('Y-m-d') }}</p>
 @empty <p class="muted">None.</p> @endforelse
-</div>
+</x-card>
 @endsection
