@@ -20,6 +20,7 @@
 		button.link { background:none; color:var(--muted); padding:0; font-weight:400; text-decoration:underline; }
 		.row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:12px; }
 		.ok { color:var(--ok); } .err { color:var(--bad); margin:6px 0 0; }
+		a { color:var(--accent); text-decoration:none; } table { width:100%; border-collapse:collapse; } th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
 		.muted { color:var(--muted); } code { background:var(--bg); padding:2px 6px; border-radius:6px; }
 	</style>
 </head>
@@ -27,7 +28,11 @@
 	<header>
 		<strong>ElevenRank HQ</strong>
 		@auth
-			<form method="post" action="/admin/logout">@csrf<button class="link">Sign out</button></form>
+			<nav style="display:flex;gap:16px;align-items:center">
+				<a href="/admin/releases">Releases</a>
+				<a href="/admin/licences">Licences</a>
+				<form method="post" action="/admin/logout">@csrf<button class="link">Sign out</button></form>
+			</nav>
 		@endauth
 	</header>
 	<main>@yield('content')</main>
