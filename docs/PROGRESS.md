@@ -158,3 +158,16 @@ Not done:
 - Checkout still creates a pending order; there is no payment provider redirect yet.
 - Deleting an account cascades to its orders; decide on retention for accounting before launch.
 - Reset-password (token) page, the States reference sheet and Top bar / Sidebar sheets were not compared in detail.
+
+## HQ pages matched to the canvases (nav, Overview, Customers, Orders, Licences, Releases, Plans, Tickets, Audit, Staff, Webhooks, Settings, No access, Sign in)
+Payment provider is now **Paddle** (Lemon Squeezy is shutting down on 31 Mar 2027). Webhook at `POST /webhooks/paddle`, off until `PADDLE_WEBHOOK_SECRET` is set; map price ids with `PADDLE_PRICES`; the checkout must pass `custom_data` `{order, email}`. Failed events are kept in the webhook log and can be retried from HQ.
+
+**Not done / differences**
+- Customer: no "Disable account", no last sign-in row; the staff note is an editable box (canvas shows it read-only); "Message" is a mailto link.
+- Staff and roles: "Invite staff" is a mailto placeholder (create staff with the console command); role matrix is read from the real permission rules, so Finance shows None for customers and tickets where the canvas sample showed View.
+- Releases: no draft state; the version is read from the zip (not typed); changelog and "requires" are stored but the WordPress update check does not use them yet; downloads count only from the new counter.
+- Settings: seller name, support email and refund window are stored but invoices, emails and the refund rules do not read them yet.
+- Tickets: assignment is automatic (first staff reply); there is no manual assignee picker.
+- Sign in: the code field is optional; leaving it empty still goes to the separate code page.
+- Overview: greeting and chart match; the sample-data label is not shown.
+- Not compared visually: Order, Orders, Customers, Licences lists after the last tweak, Webhooks, Settings, New release, Audit, No access.

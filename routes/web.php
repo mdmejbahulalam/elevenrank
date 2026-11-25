@@ -130,6 +130,7 @@ Route::prefix('admin')->group(function () {
             Route::post('tickets/{ticket}/reply', [StaffController::class, 'replyTicket']);
         });
         Route::get('audit', [StaffController::class, 'audit'])->middleware('can:staff.audit');
+        Route::get('audit.csv', [StaffController::class, 'auditCsv'])->middleware('can:staff.audit');
         Route::get('staff', [StaffController::class, 'staff'])->middleware('can:staff.staff');
         Route::get('webhooks', [StaffController::class, 'webhooks'])->middleware('can:staff.webhooks');
         Route::post('webhooks/{event}/retry', [StaffController::class, 'retryWebhook'])->middleware('can:staff.webhooks');

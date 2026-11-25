@@ -19,8 +19,9 @@
 			@if ($refunds)<div class="h-attn"><span class="ic">!</span><div><p class="a-h3" style="margin:0"><a href="/admin/tickets">{{ $refunds }} refund {{ str('request')->plural($refunds) }}</a></p><p class="a-small a-muted" style="margin:0">Check the 14-day window.</p></div></div>@endif
 			@if ($pending)<div class="h-attn"><span class="ic">!</span><div><p class="a-h3" style="margin:0"><a href="/admin/orders?status=pending">{{ $pending }} {{ str('order')->plural($pending) }} to confirm</a></p></div></div>@endif
 			@if ($waiting)<div class="h-attn"><span class="ic">!</span><div><p class="a-h3" style="margin:0"><a href="/admin/tickets">{{ $waiting }} {{ str('ticket')->plural($waiting) }} waiting for a reply</a></p><p class="a-small a-muted" style="margin:0">Oldest is {{ $oldestDays }} {{ str('day')->plural($oldestDays) }}.</p></div></div>@endif
+			@if ($failedHooks)<div class="h-attn"><span class="ic">!</span><div><p class="a-h3" style="margin:0"><a href="/admin/webhooks">{{ $failedHooks }} webhook {{ str('delivery')->plural($failedHooks) }} failed</a></p><p class="a-small a-muted" style="margin:0">Retry from Webhooks.</p></div></div>@endif
 			@if ($expiring)<div class="h-attn"><span class="ic">!</span><div><p class="a-h3" style="margin:0"><a href="/admin/licences?ends=30">{{ $expiring }} {{ str('licence')->plural($expiring) }} end within 30 days</a></p></div></div>@endif
-			@if (! $refunds && ! $pending && ! $waiting && ! $expiring)<p class="a-muted" style="margin:12px 0 0">Nothing needs attention.</p>@endif
+			@if (! $refunds && ! $pending && ! $waiting && ! $expiring && ! $failedHooks)<p class="a-muted" style="margin:12px 0 0">Nothing needs attention.</p>@endif
 		</section>
 	</div>
 	<section><h2>Latest activity</h2>

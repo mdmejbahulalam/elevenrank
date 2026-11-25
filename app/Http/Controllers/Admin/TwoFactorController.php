@@ -83,7 +83,7 @@ class TwoFactorController extends Controller
     }
 
     /** A valid authenticator code (each time step usable once) or an unused recovery code. */
-    private function accept(User $user, string $code): bool
+    public function accept(User $user, string $code): bool
     {
         $step = Totp::verify($user->two_factor_secret, $code);
         if ($step !== null && $step > (int) $user->two_factor_last_step) {

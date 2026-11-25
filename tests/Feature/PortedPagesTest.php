@@ -42,7 +42,7 @@ class PortedPagesTest extends TestCase
         $this->get('/admin/customers')->assertOk()->assertSee($user->email);
         $this->get("/admin/customers/{$user->id}")->assertOk()->assertSee($order->number);
         $this->get('/admin/tickets?status=all')->assertOk()->assertSee('Help me');
-        $this->get('/admin/tickets/1')->assertOk()->assertSee('Close the ticket');
+        $this->get('/admin/tickets/1')->assertOk()->assertSee('Mark solved');
         $this->get('/admin/audit')->assertOk();
     }
 }

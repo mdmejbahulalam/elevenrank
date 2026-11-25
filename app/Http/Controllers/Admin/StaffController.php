@@ -39,6 +39,7 @@ class StaffController extends Controller
             'refunds' => Ticket::where('status', '!=', 'closed')->where('subject', 'like', '%refund%')->count(),
             'waiting' => Ticket::where('status', 'open')->count(),
             'oldestDays' => $oldest ? (int) $oldest->updated_at->diffInDays(now()) : 0,
+            'failedHooks' => \App\Models\WebhookEvent::where('status', 'failed')->count(),
             'expiring' => Licence::where('status', 'active')->whereBetween('expires', [now(), now()->addDays(30)])->count(),
             'activity' => AuditLog::with('user')->latest('id')->limit(5)->get(),
         ]);
@@ -202,31 +203,92 @@ class StaffController extends Controller
 
     public function tickets(Request $request): View
     {
-        $status = (string) $request->query('status', 'open');
-        $tickets = Ticket::with('user')->when($status !== 'all', fn ($q) => $q->where('status', $status))->latest('updated_at')->limit(200)->get();
+        $q = trim((string) $request->query('q'));
+        $status = (string) $request->query('status', '');
+        $assigned = (string) $request->query('assigned', '');
+        $tickets = Ticket::with(['user', 'assignee'])
+            ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('subject', 'like', "%{$q}%")->orWhereHas('user', fn ($u) => $u->where('email', 'like', "%{$q}%")->orWhere('name', 'like', "%{$q}%"))))
+            ->when(in_array($status, ['open', 'answered', 'closed'], true), fn ($query) => $query->where('status', $status))
+            ->when($assigned === 'me', fn ($query) => $query->where('assigned_to', $request->user()->id))
+            ->when($assigned === 'none', fn ($query) => $query->whereNull('assigned_to'))
+            ->latest('updated_at')->limit(200)->get();
 
-        return view('admin.tickets', ['tickets' => $tickets, 'status' => $status]);
+        return view('admin.tickets', ['tickets' => $tickets, 'q' => $q, 'status' => $status, 'assigned' => $assigned]);
     }
 
     public function ticket(Ticket $ticket): View
     {
-        return view('admin.ticket', ['ticket' => $ticket->load(['user', 'replies.user'])]);
+        $ticket->load(['user', 'assignee', 'replies.user']);
+        $licence = $ticket->user?->licences()->with('plan')->latest('id')->first();
+
+        return view('admin.ticket', ['ticket' => $ticket, 'licence' => $licence]);
     }
 
     public function replyTicket(Request $request, Ticket $ticket): RedirectResponse
     {
-        $data = $request->validate(['body' => ['required', 'string', 'max:5000']]);
-        $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => true, 'body' => $data['body']]);
-        $ticket->update(['status' => $request->boolean('close') ? 'closed' : 'answered']);
+        $data = $request->validate(['body' => ['nullable', 'string', 'max:5000'], 'do' => ['nullable', 'in:reply,note,solve']]);
+        $do = $data['do'] ?? ($request->boolean('close') ? 'solve' : 'reply');
+        $body = trim((string) ($data['body'] ?? ''));
+        if ($do !== 'solve' && $body === '') {
+            return back()->withErrors(['body' => 'Write something first.']);
+        }
+
+        if ($do === 'solve' && $body === '') {
+            $ticket->update(['status' => 'closed']);
+            AuditLog::record('ticket.solved', '#'.$ticket->id);
+
+            return back()->with('status', 'Ticket marked solved.');
+        }
+
+        $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => true, 'is_note' => $do === 'note', 'body' => $body]);
+        if ($do === 'note') {
+            AuditLog::record('ticket.noted', '#'.$ticket->id);
+
+            return back()->with('status', 'Internal note added.');
+        }
+
+        $ticket->update(['status' => $do === 'solve' ? 'closed' : 'answered', 'assigned_to' => $ticket->assigned_to ?: $request->user()->id]);
         AuditLog::record('ticket.replied', '#'.$ticket->id);
-        app(\App\Services\Notifier::class)->ticketReply($ticket->load('user'), $data['body']);
+        app(\App\Services\Notifier::class)->ticketReply($ticket->load('user'), $body);
 
         return back()->with('status', 'Reply sent.');
     }
 
-    public function audit(): View
+    private function auditQuery(Request $request)
     {
-        return view('admin.audit', ['logs' => AuditLog::with('user')->latest('id')->limit(200)->get()]);
+        $q = trim((string) $request->query('q'));
+        $who = (string) $request->query('who', '');
+        $range = (string) $request->query('range', '30');
+
+        return AuditLog::with('user')
+            ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('action', 'like', "%{$q}%")->orWhere('subject', 'like', "%{$q}%")->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$q}%")->orWhere('email', 'like', "%{$q}%"))))
+            ->when(ctype_digit($who) && $who !== '', fn ($query) => $query->where('user_id', (int) $who))
+            ->when(ctype_digit($range) && $range !== '0', fn ($query) => $query->where('created_at', '>=', now()->subDays((int) $range)))
+            ->latest('id');
+    }
+
+    public function audit(Request $request): View
+    {
+        return view('admin.audit', [
+            'logs' => $this->auditQuery($request)->limit(200)->get(), 'staff' => User::where('is_admin', true)->orderBy('name')->get(),
+            'q' => trim((string) $request->query('q')), 'who' => (string) $request->query('who', ''), 'range' => (string) $request->query('range', '30'),
+        ]);
+    }
+
+    public function auditCsv(Request $request): StreamedResponse
+    {
+        $rows = $this->auditQuery($request)->limit(5000)->get();
+        AuditLog::record('audit.exported', (string) $rows->count().' rows');
+
+        return response()->streamDownload(function () use ($rows) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['When', 'Who', 'Action', 'Subject', 'Reason', 'IP']);
+            foreach ($rows as $l) {
+                $cell = fn ($v) => preg_match('/^[=+\-@]/', (string) $v) ? "'".$v : (string) $v;
+                fputcsv($out, [$l->created_at->format('Y-m-d H:i:s'), $l->user?->email ?? 'system', $cell($l->action), $cell($l->subject), $cell($l->reason), $l->ip]);
+            }
+            fclose($out);
+        }, 'audit-log.csv', ['Content-Type' => 'text/csv']);
     }
 
     public function staff(): View

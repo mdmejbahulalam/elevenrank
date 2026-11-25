@@ -189,7 +189,7 @@ class DashboardController extends Controller
     {
         abort_unless($ticket->user_id === $request->user()->id, 404);
 
-        return view('account.ticket', ['ticket' => $ticket->load('replies.user')]);
+        return view('account.ticket', ['ticket' => $ticket->load('publicReplies.user')]);
     }
 
     public function replyTicket(Request $request, Ticket $ticket): RedirectResponse

@@ -54,7 +54,7 @@ class SelfServiceController extends Controller
             'account' => $u->only(['name', 'email', 'created_at']),
             'orders' => $u->orders()->with('plan')->get()->map(fn ($o) => ['number' => $o->number, 'plan' => $o->plan->name, 'amount' => $o->amount(), 'status' => $o->status, 'placed' => $o->created_at])->all(),
             'licences' => $u->licences()->with('activations')->get()->map(fn ($l) => ['key' => $l->license_key, 'label' => $l->label, 'status' => $l->status, 'expires' => $l->expires, 'sites' => $l->activations->pluck('site')->all()])->all(),
-            'tickets' => $u->tickets()->with('replies')->get()->map(fn ($t) => ['subject' => $t->subject, 'status' => $t->status, 'replies' => $t->replies->map(fn ($r) => ['staff' => $r->is_staff, 'body' => $r->body, 'at' => $r->created_at])->all()])->all(),
+            'tickets' => $u->tickets()->with('publicReplies')->get()->map(fn ($t) => ['subject' => $t->subject, 'status' => $t->status, 'replies' => $t->publicReplies->map(fn ($r) => ['staff' => $r->is_staff, 'body' => $r->body, 'at' => $r->created_at])->all()])->all(),
         ], 200, ['Content-Disposition' => 'attachment; filename="elevenrank-my-data.json"'], JSON_PRETTY_PRINT);
     }
 }

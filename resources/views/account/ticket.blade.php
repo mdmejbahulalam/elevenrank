@@ -7,7 +7,7 @@
 	<span class="a-pill {{ $tone }}" style="margin-top:14px">{{ $label }}</span>
 </div>
 <div class="a-stack" style="gap:16px">
-	@foreach ($ticket->replies as $r)
+	@foreach ($ticket->publicReplies as $r)
 		<div class="a-msg @if($r->is_staff) staff @endif"><p class="who">{{ $r->is_staff ? 'ElevenRank support' : 'You' }} · {{ $r->created_at->isToday() ? 'Today, '.$r->created_at->format('H:i') : $r->created_at->format('j M Y, H:i') }}</p><div style="white-space:pre-wrap">{{ $r->body }}</div></div>
 	@endforeach
 </div>
