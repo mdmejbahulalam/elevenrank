@@ -89,3 +89,16 @@ a.a-btn.ghost { color: var(--accent); padding: 0 12px; }
 .a-empty { text-align: center; padding: 40px 20px; }
 .a-empty .ic { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--accent-soft); color: var(--accent-dark); display: grid; place-items: center; margin: 0 auto 16px; }
 .a-empty .ic svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+/* staff list pages: canvas table, card and filter density */
+.a-main .table-wrap { border-radius: var(--r-md); }
+.a-main th, .a-main td { padding: 14px 16px; vertical-align: middle; }
+.a-main thead th { padding: 10px 16px; }
+.a-main .card { box-shadow: none; margin-bottom: 20px; }
+.a-main td form { margin: 0; }
+.h-filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; }
+.h-filters input[type=text] { max-width: 320px; }
+.h-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.h-chips a { text-decoration: none; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--field-border); color: var(--ink); font: 500 14px/20px var(--font); }
+.h-chips a:hover { background: var(--accent-soft); }
+.h-chips a[aria-current] { background: var(--accent-soft); color: var(--accent-dark); border-color: var(--accent); font-weight: 600; }
+.h-note { background: var(--warn-soft); border: 1px solid var(--warn); border-radius: var(--r-md); padding: 12px 16px; }

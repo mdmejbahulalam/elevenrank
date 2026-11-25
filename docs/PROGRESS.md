@@ -130,3 +130,7 @@
 ## Account detail pages matched
 - Sign-in layout (used by register, forgot, reset and staff sign-in), order, ticket thread and checkout follow the Account canvas. 56 tests pass; sign-in page checked in the browser.
 - Not done: invoice page keeps its own print styling; no deactivate-confirm, delete-account, billing-address or payment-provider pages; signed-in pages not viewed in a browser; all staff pages beyond Overview.
+
+## Staff list pages matched
+- Customers, Orders, Tickets and Audit log follow the HQ boards (eyebrow header, status chips, canvas table density); staff tables and cards share the canvas look. 56 tests pass.
+- Not done: customer detail (two-column with details and staff note), licence detail, order detail with refund modal, ticket thread, new release form, Plans, Releases, Licences and System pages only get the shared table and card look; Staff, Webhooks and Settings pages do not exist; signed-in pages not viewed in a browser.
