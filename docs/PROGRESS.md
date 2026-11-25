@@ -118,3 +118,7 @@
 ## Blog and Compare pages
 - /blog, /blog/{slug} (posts read from config/blog.php until the content store exists; empty state and noindex while there are none) and /compare/yoast-seo (Yoast column marked Not yet checked, noindex until each cell is verified). Footer links added. 56 tests pass.
 - Not done: real posts, cover images, the verified Yoast comparison, sitemap entries for these pages, Hooks page restyle.
+
+## Account and HQ shell matched to the canvases
+- Shared signed-in shell (top bar with avatar, role and sign-out; sidebar; cards, pills, alerts, meters, tables) in resources/css/shell.css; account Overview (licence card, get started, summary cards) and HQ Overview (stats, needs attention) rebuilt. 56 tests pass.
+- Not done: the other account and HQ pages (licences, downloads, orders, invoice, tickets, profile, sign-in/register/forgot, customers, licences, orders, releases, plans, audit, system, two-factor) still use the earlier component styling inside the new shell; not yet compared board by board; signed-in pages not viewed in a browser. HQ boards for Staff, Webhooks and Settings have no pages yet.

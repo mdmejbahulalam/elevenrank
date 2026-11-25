@@ -5,21 +5,25 @@
 	<title>{{ trim($__env->yieldContent('page')) ?: 'My account' }} · ElevenRank</title>
 	<link rel="stylesheet" href="/assets/account.css?v={{ @filemtime(public_path('assets/account.css')) }}">
 </head>
-<body>
+<body class="a-page">
 <a class="skip" href="#main">Skip to content</a>
-<header class="acc-top"><div class="in">
-	<x-logo />
-	<div class="row" style="margin:0"><a class="btn ghost small" href="/pricing">Back to site</a><span class="muted small">{{ auth()->user()->name }}</span></div>
+<header class="a-top"><div class="in">
+	<a class="a-brand" href="/account"><img src="/assets/mark.svg" alt="" width="28" height="28"><span>Eleven<b>Rank</b></span></a>
+	<div class="a-user">
+		<a class="a-btn ghost sm" href="/pricing" style="color:var(--muted)">Back to site</a>
+		<span class="nm">{{ auth()->user()->name }}</span>
+		<span class="a-av" aria-hidden="true">{{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
+		<form method="post" action="/account/logout">@csrf<button class="a-btn secondary sm">Sign out</button></form>
+	</div>
 </div></header>
-<div class="acc-shell">
-	<nav class="acc-side" aria-label="Account">
+<div class="a-shell">
+	<nav class="a-side" aria-label="Account">
 		@foreach ([['/account', 'Overview', 'account', 'home'], ['/account/licences', 'Licences', 'account/licences*', 'key'], ['/account/downloads', 'Downloads', 'account/downloads', 'download'], ['/account/orders', 'Orders', 'account/orders*', 'receipt'], ['/account/tickets', 'Support', 'account/tickets*', 'chat'], ['/account/profile', 'Profile', 'account/profile', 'user']] as [$href, $label, $pat, $ic])
-			<a href="{{ $href }}" @if(request()->is($pat)) aria-current="page" @endif><x-icon :name="$ic" />{{ $label }}</a>
+			<a class="l @if(request()->is($pat)) on @endif" href="{{ $href }}" @if(request()->is($pat)) aria-current="page" @endif><x-icon :name="$ic" />{{ $label }}</a>
 		@endforeach
-		@if (auth()->user()->is_admin)<a class="desk" href="/admin"><x-icon name="cog" />Staff area</a>@endif
-		<form method="post" action="/account/logout" class="desk">@csrf<button class="link">Sign out</button></form>
+		@if (auth()->user()->is_admin)<a class="l desk" href="/admin"><x-icon name="cog" />Staff area</a>@endif
 	</nav>
-	<main id="main" class="acc-main">
+	<main id="main" class="a-main">
 		@if (session('status'))<div class="flash" role="status">{{ session('status') }}</div>@endif
 		@yield('body')
 	</main>
