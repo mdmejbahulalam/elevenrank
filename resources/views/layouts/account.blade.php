@@ -11,7 +11,7 @@
 	<a class="a-brand" href="/account"><img src="/assets/mark.svg" alt="" width="28" height="28"><span>Eleven<b>Rank</b></span></a>
 	<div class="a-user">
 		<a class="a-btn ghost sm" href="/pricing" style="color:var(--muted)">Back to site</a>
-		<span class="nm">{{ auth()->user()->name }}</span>
+		<span class="nm">{{ strtok(auth()->user()->name, ' ') }}</span>
 		<span class="a-av" aria-hidden="true">{{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
 		<form method="post" action="/account/logout">@csrf<button class="a-btn secondary sm">Sign out</button></form>
 	</div>

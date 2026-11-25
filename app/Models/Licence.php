@@ -14,6 +14,11 @@ class Licence extends Model
         return ['expires' => 'datetime', 'site_limit' => 'integer'];
     }
 
+    public function plan(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
+    }
+
     public function activations(): HasMany
     {
         return $this->hasMany(Activation::class);

@@ -8,7 +8,7 @@ $revoked = $first && $first->status !== 'active';
 $pct = $first && $first->site_limit ? min(100, round($first->activations_count / $first->site_limit * 100)) : 0;
 @endphp
 <p class="a-eyebrow">Overview</p>
-<h1>Welcome back, {{ auth()->user()->name }}</h1>
+<h1>Welcome back, {{ strtok(auth()->user()->name, " ") }}</h1>
 <p class="a-sub">Your ElevenRank Pro licence, downloads and support in one place.</p>
 <div class="a-stack">
 	@if ($first && ! $hasSite && ! $revoked && ! $ended)
@@ -25,7 +25,7 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 		@foreach ($licences as $l)
 		<section class="a-card" aria-label="Licence">
 			<div class="a-between">
-				<div><p class="a-eyebrow">Licence</p><h2 style="margin:0">{{ $l->label ?: 'ElevenRank Pro' }}</h2></div>
+				<div><p class="a-eyebrow">Licence</p><h2 style="margin:0">{{ $l->label ?: (($l->plan?->name ?? "ElevenRank Pro").($l->site_limit ? ", ".$l->site_limit." ".str('site')->plural($l->site_limit) : "")) }}</h2></div>
 				@if ($l->status !== 'active')<span class="a-pill bad">Revoked</span>
 				@elseif ($l->isExpired())<span class="a-pill info">Term ended</span>
 				@elseif ($l->activations_count === 0)<span class="a-pill info">Ready to activate</span>
@@ -44,7 +44,7 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 				</div>
 			</div>
 			<div class="a-row" style="margin-top:20px">
-				@if ($l->status === 'active')<a class="a-btn primary" href="/account/downloads">Download Pro</a>@endif
+				@if ($l->status === 'active')<a class="a-btn primary" href="/account/downloads">Download Pro{{ $version ? " ".$version : "" }}</a>@endif
 				<a class="a-btn secondary" href="/account/licences">Manage sites</a>
 				@if ($l->status !== 'active' || $l->isExpired())<a class="a-btn primary" href="/pricing">Renew licence</a>@endif
 			</div>
@@ -60,7 +60,7 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 	@endif
 
 	<div class="a-grid">
-		<section class="a-card"><h2 class="a-h3">Downloads</h2><p class="a-small a-muted" style="margin:4px 0 12px">The latest Pro release and the free plugin.</p><a class="a-btn ghost sm" href="/account/downloads" style="padding-left:0">See downloads</a></section>
+		<section class="a-card"><h2 class="a-h3">Latest release</h2>@if ($version)<p class="a-small a-muted" style="margin:4px 0 12px">Pro {{ $version }}</p>@else<p class="a-small a-muted" style="margin:4px 0 12px">No release published yet.</p>@endif<a class="a-btn ghost sm" href="/account/downloads" style="padding-left:0">See downloads</a></section>
 		<section class="a-card"><h2 class="a-h3">Support</h2><p class="a-small a-muted" style="margin:4px 0 12px">{{ $tickets ? $tickets.' open '.\Illuminate\Support\Str::plural('ticket', $tickets).'.' : 'No open tickets.' }}</p><a class="a-btn secondary sm" href="/account/tickets">Open a ticket</a></section>
 		<section class="a-card">
 			<h2 class="a-h3">Last order</h2>

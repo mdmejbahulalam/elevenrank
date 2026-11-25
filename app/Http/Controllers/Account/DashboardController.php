@@ -19,12 +19,13 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DashboardController extends Controller
 {
-    public function overview(Request $request): View
+    public function overview(Request $request, Releases $releases): View
     {
         $user = $request->user();
 
         return view('account.overview', [
-            'licences' => $user->licences()->withCount('activations')->latest('id')->get(),
+            'licences' => $user->licences()->with('plan')->withCount('activations')->latest('id')->get(),
+            'version' => $releases->currentVersion(),
             'orders' => $user->orders()->with('plan')->latest('id')->limit(3)->get(),
             'tickets' => $user->tickets()->where('status', '!=', 'closed')->count(),
             'hasSite' => $user->licences()->whereHas('activations')->exists(),
