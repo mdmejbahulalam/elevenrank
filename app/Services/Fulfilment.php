@@ -6,7 +6,6 @@ use App\Models\AuditLog;
 use App\Models\Licence;
 use App\Models\Order;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 
 /** Turns paid orders into licences, and refunds into revoked ones. Provider-neutral. */
 class Fulfilment
@@ -38,8 +37,7 @@ class Fulfilment
             ]);
 
             AuditLog::record('order.paid', $order->number);
-            $this->email($order->user->email, 'Your ElevenRank Pro licence',
-                "Thank you for your order {$order->number}.\n\nYour licence key: {$licence->license_key}\nSites: {$plan->sitesLabel()}\nValid until: {$licence->expires?->format('Y-m-d')}\n\nSign in at ".url('/account')." to download ElevenRank Pro and manage your sites.");
+            app(Notifier::class)->receipt($order->load('licence'));
 
             return $order;
         });
@@ -54,6 +52,7 @@ class Fulfilment
         $order->licence?->update(['status' => 'revoked']);
         $order->update(['status' => 'refunded', 'refunded_at' => now()]);
         AuditLog::record('order.refunded', $order->number);
+        app(Notifier::class)->refund($order);
 
         return $order;
     }
@@ -68,12 +67,4 @@ class Fulfilment
         return $order;
     }
 
-    private function email(string $to, string $subject, string $body): void
-    {
-        try {
-            Mail::raw($body, fn ($m) => $m->to($to)->subject($subject));
-        } catch (\Throwable $e) {
-            report($e); // A mail failure must never undo a paid order.
-        }
-    }
 }

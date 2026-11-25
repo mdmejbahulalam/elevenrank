@@ -46,6 +46,7 @@ class AuthController extends Controller
         $user = User::create($data); // is_admin is not fillable and defaults to false.
         Auth::login($user);
         $request->session()->regenerate();
+        app(\App\Services\Notifier::class)->welcome($user);
 
         return redirect()->intended('/account');
     }

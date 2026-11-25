@@ -77,3 +77,9 @@
 **Not done (still Phase 3)**
 - Email verification, two-factor, active sessions, delete account, billing name/address/tax ID, renewal and cancel-renewal, ticket attachments and unread marker, ticket tied to a licence (site address is free text), seat meter and reveal/mask on keys, loading and error states, sending the Phase 1 email templates (receipts, key delivery), Playwright journey.
 - Not run: browser check of new pages, axe.
+
+### Phase 3 continued: service emails (2026-11-25)
+- `App\Mail\TemplateMail` plus `App\Services\Notifier` send the Phase 1 templates: welcome (registration), receipt with key (order marked paid, once), refund (once), ticket reply (staff reply). The old plain-text key email in `Fulfilment` is replaced. Sending is synchronous and wrapped so a mail failure is reported but never undoes an order (tested).
+- `php artisan emails:term-notices` sends the 30-day, 7-day and term-ended emails once per licence (migration `add_notice_columns_to_licences`), scheduled daily at 08:00. **Hosting needs one cron entry:** `* * * * * php /path/to/artisan schedule:run`.
+- Tests: `ServiceEmailsTest`. Total 39 passed, 325 assertions.
+- Still needed: set `MAIL_*` for a real sender (default is `log`), real seller name and support address in the email footer (placeholders), password-reset mail still uses Laravel's default text, no email verification yet.

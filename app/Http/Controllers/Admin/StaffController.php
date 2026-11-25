@@ -110,6 +110,7 @@ class StaffController extends Controller
         $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => true, 'body' => $data['body']]);
         $ticket->update(['status' => $request->boolean('close') ? 'closed' : 'answered']);
         AuditLog::record('ticket.replied', '#'.$ticket->id);
+        app(\App\Services\Notifier::class)->ticketReply($ticket->load('user'), $data['body']);
 
         return back()->with('status', 'Reply sent.');
     }
