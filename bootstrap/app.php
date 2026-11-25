@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(fn ($request) => $request->is('admin*') ? '/admin/login' : '/account/login');
         $middleware->validateCsrfTokens(except: ['webhooks/*']);
         $middleware->web(append: [\App\Http\Middleware\EnsureNotDisabled::class]);
-        $middleware->alias(['admin' => \App\Http\Middleware\EnsureAdmin::class, 'staff2fa' => \App\Http\Middleware\EnsureStaffTwoFactor::class]);
+        $middleware->alias(['checkout.open' => \App\Http\Middleware\EnsureCheckoutOpen::class, 'admin' => \App\Http\Middleware\EnsureAdmin::class, 'staff2fa' => \App\Http\Middleware\EnsureStaffTwoFactor::class]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Staff who open an area their role does not cover see a calm page, and the attempt is recorded.

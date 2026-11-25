@@ -59,6 +59,22 @@ class AccountControlTest extends TestCase
         $this->get('/pricing')->assertSee('social-pro.png', false);
     }
 
+    public function test_closed_checkout_hides_buy_buttons_and_blocks_orders(): void
+    {
+        config(['services.checkout_open' => false]);
+        $this->seed(\Database\Seeders\DatabaseSeeder::class);
+        $this->get('/pricing')->assertSee('Buying opens soon')->assertDontSee('/checkout/');
+        $this->actingAs(User::factory()->create())->get('/checkout/personal')->assertNotFound();
+        $this->post('/checkout/personal')->assertNotFound();
+    }
+
+    public function test_legal_pages_name_the_seller_and_payment_provider(): void
+    {
+        $this->get('/terms')->assertSee('Who we are')->assertSee('Paddle')->assertSee('[Legal name and address]');
+        $this->get('/privacy')->assertSee('Payment provider');
+        $this->get('/refunds')->assertSee('How you are paid back');
+    }
+
     public function test_pages_carry_a_social_image(): void
     {
         $this->get('/')->assertSee('/brand/social-default.png', false);

@@ -15,7 +15,7 @@
 					<h2 class="s-h">{{ $plan->name }}</h2><span class="s-muted s-small">{{ $plan->sitesLabel() }}</span>
 					<div class="amount">{{ $plan->price() }} <small>/ year</small></div>
 					<ul class="s-ticks"><li>All Pro features</li><li>Updates and support for {{ $plan->months }} months</li><li>Move the licence to another site any time</li></ul>
-					<a class="s-btn {{ $feat ? 'primary' : 'secondary' }} block" href="/checkout/{{ $plan->slug }}">Get {{ $plan->name }}</a>
+					@if (config('services.checkout_open'))<a class="s-btn {{ $feat ? 'primary' : 'secondary' }} block" href="/checkout/{{ $plan->slug }}">Get {{ $plan->name }}</a>@else<a class="s-btn secondary block" href="/support">Buying opens soon. Ask us</a>@endif
 				</div>
 			@endforeach
 		</div>

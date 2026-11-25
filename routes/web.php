@@ -93,7 +93,7 @@ Route::prefix('account')->group(function () {
     });
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'checkout.open'])->group(function () {
     Route::get('checkout/{plan:slug}', [Account::class, 'checkout']);
     Route::post('checkout/{plan:slug}', [Account::class, 'placeOrder']);
 });

@@ -21,6 +21,7 @@ Target: shared hosting, PHP 8.2+, no Node. Tick each box on the server.
 - [ ] `APP_KEY` generated on the server: `php artisan key:generate --force`
 - [ ] `DB_*` set for the production database
 - [ ] `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_FROM_ADDRESS`, `MAIL_FROM_NAME`
+- [ ] `CHECKOUT_OPEN=false` for the first deploy (Pricing shows "Buying opens soon" and checkout returns 404). It defaults to closed in production. Set `true` only after Paddle is approved and tested
 - [ ] `PADDLE_WEBHOOK_SECRET` and `PADDLE_PRICES` (price id => plan slug), once the Paddle account exists
 - [ ] Licence API settings unchanged from what the plugin expects (the API is frozen)
 
@@ -40,6 +41,8 @@ Target: shared hosting, PHP 8.2+, no Node. Tick each box on the server.
 - [ ] Cron every minute: `* * * * * php /path/to/artisan schedule:run >> /dev/null 2>&1`
 
 ## 7. Payments (Paddle)
+Paddle reviews a live site, so deploy with checkout closed first, then apply.
+- [ ] Terms, Privacy and Refunds pages are live and linked in the footer, with the real seller name, address and support email
 - [ ] Paddle account approved, products and prices created
 - [ ] Checkout passes `custom_data {order, email}`
 - [ ] Webhook destination set to `https://your-domain/webhooks/paddle`, events: `transaction.completed`, `adjustment.created`, `adjustment.updated`

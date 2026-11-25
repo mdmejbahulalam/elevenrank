@@ -28,6 +28,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Buying is closed until the payment provider is set up. Open by default outside production.
+    'checkout_open' => env('CHECKOUT_OPEN') === null ? env('APP_ENV') !== 'production' : (bool) env('CHECKOUT_OPEN'),
+
     'verify_email' => (bool) env('VERIFY_EMAIL', false),
 
     'paddle' => [
