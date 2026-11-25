@@ -105,3 +105,8 @@
 - Lost device: `php artisan admin:reset-2fa <email>` (they re-enrol at next sign-in). Migration `add_two_factor_to_users`.
 - Tests: `StaffTwoFactorTest` (7). Total 53 passed, 440 assertions.
 - Not done: QR code, a screen to reset another staff member's 2FA, 2FA for customers (spec lists it as opt-in), a "turn off" action for yourself, remember-this-device.
+
+## Homepage matched to the Site canvas
+- New marketing header and footer (brand, nav, mobile menu, Company column) and a rebuilt homepage following the Site canvas home board: split hero with a dashboard mockup, feature cards with icons, steps, Free/Pro split, FAQ, closing call to action. Styles live in resources/css/home.css (`.s-*`) and are bundled into site.css.
+- Checked in the browser in light, dark and mobile widths; 53 tests pass.
+- Not done: the hero mockup is a labelled placeholder wireframe (a real screenshot is still needed); Blog and "Switching from Yoast" links omitted because those pages do not exist; Features, Pro, Pricing and other pages keep their older layout inside the new header and are not yet compared with their canvas boards.

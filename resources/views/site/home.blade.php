@@ -8,110 +8,116 @@ $faq = [
 	['What happens if my Pro licence ends?', 'Pro keeps working on your sites. You stop receiving updates and support until you renew.'],
 	['Can I get a refund?', 'Yes, within 14 days of purchase. See the refund policy.'],
 ];
+$features = [
+	['Titles and meta', 'Templates with variables for posts, pages, archives and the homepage, plus robots and canonical links.', '<path d="M4 6h16M4 12h10M4 18h14"/>'],
+	['XML sitemaps', 'Posts, pages, terms and images, split into files and readable in the browser.', '<path d="M12 3v6M5 21v-6h14v6M12 9l-7 6M12 9l7 6"/>'],
+	['Structured data', 'One JSON-LD graph per page. Empty or invalid fields are left out, and nothing is made up.', '<path d="M8 4 3 12l5 8M16 4l5 8-5 8"/>'],
+	['Redirects and 404s', 'Five match types, CSV import, and a monitor that stores no IP addresses.', '<path d="M5 12h14M13 6l6 6-6 6"/>'],
+	['Live editor score', '19 checks in the block and Classic editors, computed in your browser.', '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>'],
+	['Easy to switch', 'Import from Yoast SEO, Rank Math, All in One SEO or SEOPress, with a check first that changes nothing.', '<path d="M4 8h13l-3-3M20 16H7l3 3"/>'],
+];
 @endphp
 @push('jsonld')
 <script type="application/ld+json">{!! json_encode(['@context' => 'https://schema.org', '@type' => 'SoftwareApplication', 'name' => 'ElevenRank', 'applicationCategory' => 'BusinessApplication', 'operatingSystem' => 'WordPress', 'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD']], JSON_UNESCAPED_SLASHES) !!}</script>
 @endpush
 @section('content')
-<section class="hero">
-	<div class="wrap">
-		<span class="tag">Free · GPL · for WordPress</span>
-		<h1 style="margin-top:14px">SEO that stays on your site.</h1>
-		<p class="lead">Titles, sitemaps, schema, redirects and a live score in the editor, from one calm dashboard. No tracking and no outside connections.</p>
-		<div class="cta">
-			<a class="btn" href="{{ config('site.plugin_url') }}">Get the free plugin</a>
-			<a class="btn ghost" href="/pro">See Pro</a>
+<section class="s-hero">
+	<div class="s-wrap">
+		<div class="cols">
+			<div>
+				<p class="s-eyebrow">Free · GPL · for WordPress</p>
+				<h1 class="s-d-xl">SEO that stays on your site.</h1>
+				<p class="s-lead">Titles, sitemaps, schema, redirects and a live score in the editor, from one calm dashboard. No tracking and no outside connections.</p>
+				<div class="s-row">
+					<a class="s-btn primary" href="{{ config('site.plugin_url') }}">Get the free plugin</a>
+					<a class="s-btn secondary" href="/pro">See Pro</a>
+				</div>
+			</div>
+			<div class="s-shot" aria-hidden="true">
+				<div class="bar"><i></i><i></i><i></i><span>yoursite.com/wp-admin</span></div>
+				<div class="body">
+					<div class="side"><span class="on">Dashboard</span><span>Titles</span><span>Sitemaps</span><span>Schema</span><span>Redirects</span></div>
+					<div class="main">
+						<div class="tiles"><div class="tile">Score<b>92</b></div><div class="tile">Pages<b>148</b></div><div class="tile">404s<b>3</b></div><div class="tile">Redirects<b>21</b></div></div>
+						<div class="row"><span>Homepage title</span><span class="s-pill ok">Good</span></div>
+						<div class="row"><span>XML sitemap</span><span class="s-pill ok">On</span></div>
+						<div class="row"><span>Schema graph</span><span class="s-pill ok">On</span></div>
+					</div>
+				</div>
+				<div class="s-ph">Placeholder wireframe. A real screenshot replaces this.</div>
+			</div>
 		</div>
 	</div>
 </section>
 
-<section class="proof" aria-label="At a glance">
-	<div class="wrap">
-		<div class="grid">
-			<div><strong>Private</strong><span>No requests to outside servers from the free plugin.</span></div>
-			<div><strong>Light</strong><span>Plain JavaScript analysis in your browser; no bundled services.</span></div>
-			<div><strong>Complete</strong><span>Titles, sitemaps, schema, redirects, 404 monitor and importers.</span></div>
+<section class="s-sec alt">
+	<div class="s-wrap">
+		<p class="s-eyebrow">What you get</p>
+		<h2 class="s-d-l">Everything the basics need, in one plugin</h2>
+		<p class="s-lead">So you can retire two or three others.</p>
+		<div class="s-grid">
+			@foreach ($features as [$t, $d, $icon])
+				<div class="s-card"><div class="s-ico"><svg viewBox="0 0 24 24" aria-hidden="true">{!! $icon !!}</svg></div><h3 class="s-h">{{ $t }}</h3><p>{{ $d }}</p></div>
+			@endforeach
+		</div>
+		<p style="margin-top:24px"><a class="s-btn ghost" href="/features">See every feature</a></p>
+	</div>
+</section>
+
+<section class="s-sec">
+	<div class="s-wrap">
+		<p class="s-eyebrow">How it works</p>
+		<h2 class="s-d-l">Switch in minutes</h2>
+		<p class="s-lead">Bring your titles, descriptions, redirects and settings with you.</p>
+		<div class="s-steps">
+			<div class="s-step"><h3 class="s-h">Install</h3><p class="s-muted">Add the free plugin from WordPress.org and run the short setup.</p></div>
+			<div class="s-step"><h3 class="s-h">Import</h3><p class="s-muted">Run the check, then import from Yoast SEO, Rank Math, All in One SEO or SEOPress.</p></div>
+			<div class="s-step"><h3 class="s-h">Write</h3><p class="s-muted">Watch the live score in the editor and publish.</p></div>
+		</div>
+		<p class="s-muted s-small" style="margin-top:20px">Names are used only to say what can be imported. We are not affiliated with these plugins.</p>
+	</div>
+</section>
+
+<section class="s-sec alt">
+	<div class="s-wrap">
+		<div class="s-split">
+			<div class="s-card">
+				<p class="s-eyebrow">Free</p>
+				<h2 class="s-d-m">Private by design</h2>
+				<p class="s-muted">The free plugin makes no requests to outside servers. Your text is analysed in your own browser.</p>
+				<ul class="s-ticks"><li>Titles, sitemaps, schema, redirects</li><li>Live editor score</li><li>404 monitor and importers</li></ul>
+				<a class="s-btn primary" href="{{ config('site.plugin_url') }}">Get the free plugin</a>
+			</div>
+			<div class="s-card">
+				<p class="s-eyebrow">Pro</p>
+				<h2 class="s-d-m">Need more? Add Pro.</h2>
+				<p class="s-muted">The free plugin stays fully usable without it.</p>
+				<ul class="s-ticks"><li>Site audit and auto-fix queue</li><li>Rank tracker, Search Console figures</li><li>Updates and support while licensed</li></ul>
+				<a class="s-btn secondary" href="/pricing">See pricing</a>
+			</div>
 		</div>
 	</div>
 </section>
 
-<section class="block">
-	<div class="wrap">
-		<h2>Everything the basics need, in one plugin</h2>
-		<p class="sub">So you can retire two or three others.</p>
-		<div class="grid">
-			<div class="card"><h3>Titles and meta</h3><p>Templates with variables for posts, pages, archives and the homepage, plus robots and canonical links.</p></div>
-			<div class="card"><h3>XML sitemaps</h3><p>Posts, pages, terms and images, split into files and readable in the browser.</p></div>
-			<div class="card"><h3>Structured data</h3><p>One JSON-LD graph per page. Empty or invalid fields are left out, and nothing is made up.</p></div>
-			<div class="card"><h3>Redirects and 404s</h3><p>Five match types, CSV import, and a monitor that stores no IP addresses.</p></div>
-			<div class="card"><h3>Live editor score</h3><p>19 checks in the block and Classic editors, computed in your browser.</p></div>
-			<div class="card"><h3>Easy to switch</h3><p>Import from Yoast SEO, Rank Math, All in One SEO or SEOPress, with a check first that changes nothing.</p></div>
-		</div>
-		<p style="margin-top:20px"><a href="/features">See every feature</a></p>
-	</div>
-</section>
-
-<section class="block">
-	<div class="wrap">
-		<h2>Switch in minutes</h2>
-		<p class="sub">Bring your titles, descriptions, redirects and settings with you.</p>
-		<ul class="chips" aria-label="Supported importers">
-			<li>Yoast SEO</li><li>Rank Math</li><li>All in One SEO</li><li>SEOPress</li>
-		</ul>
-		<p class="muted" style="margin-top:12px">Names are used only to say what can be imported. We are not affiliated with these plugins.</p>
-	</div>
-</section>
-
-<section class="block">
-	<div class="wrap">
-		<h2>How it works</h2>
-		<ol class="steps">
-			<li><strong>Install</strong><span>Add the free plugin from WordPress.org and run the short setup.</span></li>
-			<li><strong>Import</strong><span>Run the check, then import from the plugin you use now.</span></li>
-			<li><strong>Write</strong><span>Watch the live score in the editor and publish.</span></li>
-		</ol>
-	</div>
-</section>
-
-<section class="block">
-	<div class="wrap">
-		<h2>Free and Pro</h2>
-		<x-table :headings="['', 'Free', 'Pro']">
-			<tr><th scope="row">Titles, sitemaps, schema, redirects</th><td>Included</td><td>Included</td></tr>
-			<tr><th scope="row">Live editor score</th><td>Included</td><td>Included</td></tr>
-			<tr><th scope="row">Site audit and auto-fix queue</th><td>—</td><td>Included</td></tr>
-			<tr><th scope="row">Rank tracker, Search Console figures</th><td>—</td><td>Included</td></tr>
-			<tr><th scope="row">Updates and support after term</th><td>Free forever</td><td>While licensed</td></tr>
-		</x-table>
-		<p style="margin-top:16px"><a href="/pricing">See pricing</a></p>
-	</div>
-</section>
-
-<section class="block">
-	<div class="wrap">
-		<h2>Private by design</h2>
-		<p class="sub">The free plugin makes no requests to outside servers. Your text is analysed in your own browser.</p>
-		<div class="card" style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between">
-			<div><h3>Need more? There is a Pro add-on.</h3><p>Site audit, auto-fix queue, rank tracker, Search Console figures and more. The free plugin stays fully usable without it.</p></div>
-			<a class="btn" href="/pricing">See pricing</a>
+<section class="s-sec">
+	<div class="s-wrap s-narrow">
+		<p class="s-eyebrow">Questions</p>
+		<h2 class="s-d-l">Good to know</h2>
+		<div class="s-faq">
+			@foreach ($faq as [$q, $a])
+				<details><summary>{{ $q }}</summary><p>{{ $a }}</p></details>
+			@endforeach
 		</div>
 	</div>
 </section>
 
-<section class="block">
-	<div class="wrap narrow">
-		<h2>Questions</h2>
-		@foreach ($faq as [$q, $a])
-			<details><summary>{{ $q }}</summary><p>{{ $a }}</p></details>
-		@endforeach
-	</div>
-</section>
-
-<section class="block">
-	<div class="wrap" style="text-align:center">
-		<h2>Try it on one site</h2>
-		<p class="sub">It is free, and it changes nothing until you say so.</p>
-		<a class="btn" href="{{ config('site.plugin_url') }}">Get the free plugin</a>
+<section class="s-sec" style="padding-top:0">
+	<div class="s-wrap">
+		<div class="s-cta">
+			<h2>Try it on one site</h2>
+			<p>It is free, and it changes nothing until you say so.</p>
+			<a class="s-btn primary" href="{{ config('site.plugin_url') }}">Get the free plugin</a>
+		</div>
 	</div>
 </section>
 @endsection

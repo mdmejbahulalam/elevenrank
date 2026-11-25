@@ -26,7 +26,7 @@ class BuildAssets extends Command
         $total = [];
         foreach (['site', 'account', 'admin'] as $skin) {
             $css = '';
-            foreach (array_merge($shared, [$skin]) as $part) {
+            foreach (array_merge($shared, [$skin], $skin === 'site' ? ['home'] : []) as $part) {
                 $css .= file_get_contents("$dir/$part.css")."\n";
             }
             $css = $this->minify($css);
