@@ -10,11 +10,11 @@ $faq = [
 ];
 $features = [
 	['Titles and meta', 'Templates with variables for posts, pages, archives and the homepage, plus robots and canonical links.', '<path d="M4 6h16M4 12h10M4 18h14"/>'],
-	['XML sitemaps', 'Posts, pages, terms and images, split into files and readable in the browser.', '<path d="M12 3v6M5 21v-6h14v6M12 9l-7 6M12 9l7 6"/>'],
+	['XML sitemaps', 'Posts, pages, terms and images, split into files and readable in the browser.', '<path d="M3 3h6v5H3zM15 3h6v5h-6zM6 8v3h12V8M12 11v6M8 20h8"/>'],
 	['Structured data', 'One JSON-LD graph per page. Empty or invalid fields are left out, and nothing is made up.', '<path d="M8 4 3 12l5 8M16 4l5 8-5 8"/>'],
-	['Redirects and 404s', 'Five match types, CSV import, and a monitor that stores no IP addresses.', '<path d="M5 12h14M13 6l6 6-6 6"/>'],
-	['Live editor score', '19 checks in the block and Classic editors, computed in your browser.', '<path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/>'],
-	['Easy to switch', 'Import from Yoast SEO, Rank Math, All in One SEO or SEOPress, with a check first that changes nothing.', '<path d="M4 8h13l-3-3M20 16H7l3 3"/>'],
+	['Redirects and 404s', 'Five match types, CSV import, and a monitor that stores no IP addresses.', '<path d="M4 8h16M16 4l4 4-4 4M20 16H4M8 12l-4 4 4 4"/>'],
+	['Live editor score', '19 checks in the block and Classic editors, computed in your browser.', '<path d="M3 17a9 9 0 1 1 18 0M12 17l4-5"/>'],
+	['Easy to switch', 'Import from Yoast SEO, Rank Math, All in One SEO or SEOPress, with a check first that changes nothing.', '<path d="M4 12h12M11 6l6 6-6 6M20 5v14"/>'],
 ];
 @endphp
 @push('jsonld')
@@ -118,7 +118,7 @@ $features = [
 
 <section class="s-sec alt">
 	<div class="s-wrap">
-		<h2 class="s-d-l rv">Up and running in three steps</h2>
+		<h2 class="s-d-l rv" style="margin-bottom:32px">Up and running in three steps</h2>
 		<div class="s-steps">
 			<div class="s-step rv"><h3 class="s-h">Install</h3><p class="s-muted">Add ElevenRank from the Plugins screen or WordPress.org and activate it.</p></div>
 			<div class="s-step rv d1"><h3 class="s-h">Run the setup wizard</h3><p class="s-muted">It checks your site title, tagline and search engine visibility.</p></div>

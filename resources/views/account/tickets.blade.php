@@ -17,9 +17,9 @@
 		<h2>Open a ticket</h2>
 		<form method="post" action="/account/tickets">
 			@csrf
-			<x-field name="subject" label="Subject" maxlength="160" required />
+			<x-field name="subject" label="Subject" maxlength="160" :value="request('subject')" required />
 			<x-field name="site" label="Site address (optional)" maxlength="190" help="The site this is about, for example example.com." />
-			<x-field name="body" label="How can we help?" :rows="5" maxlength="5000" required help="Never paste your licence key or passwords here. We can already see your licence." />
+			<x-field name="body" label="How can we help?" :value="request('body')" :rows="5" maxlength="5000" required help="Never paste your licence key or passwords here. We can already see your licence." />
 			<p style="margin-top:20px"><button class="a-btn primary">Send ticket</button></p>
 		</form>
 	</section>

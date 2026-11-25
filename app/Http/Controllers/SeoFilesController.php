@@ -9,6 +9,19 @@ class SeoFilesController extends Controller
     /** Public marketing URLs. Account and admin areas are never listed. */
     private const PAGES = ['/', '/features', '/pro', '/pricing', '/docs', '/docs/hooks', '/changelog', '/support', '/about', '/terms', '/privacy', '/refunds', '/gpl'];
 
+    /** Published documentation pages (drafts are left out of the sitemap). */
+    private static function docPaths(): array
+    {
+        $out = [];
+        foreach (config('docs.groups') as $pages) {
+            foreach ($pages as $slug => $p) {
+                if (! empty($p['draft']) || isset($p['external']) || $slug === 'getting-started') { continue; }
+                $out[] = '/docs/'.$slug;
+            }
+        }
+        return $out;
+    }
+
     public function robots(): Response
     {
         $body = "User-agent: *\nDisallow: /account\nDisallow: /admin\nDisallow: /checkout\nDisallow: /wp-json/\n\nSitemap: ".url('/sitemap.xml')."\n";
@@ -19,7 +32,7 @@ class SeoFilesController extends Controller
     public function sitemap(): Response
     {
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
-        foreach (self::PAGES as $path) {
+        foreach (array_merge(self::PAGES, self::docPaths()) as $path) {
             $xml .= '<url><loc>'.e(url($path)).'</loc></url>'."\n";
         }
 

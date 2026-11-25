@@ -22,7 +22,7 @@
 <section class="s-sec" style="padding:56px 0">
 	<div class="s-wrap s-narrow">
 		<h2 class="s-d-m">The person behind it</h2>
-		<div class="s-card"><p>[About text to be written by the owner.]</p><p style="margin-top:12px"><a href="/support">Contact and support</a></p></div>
+		<div class="s-card s-person rv"><div class="s-avatar" aria-hidden="true">[Photo]</div><div><h3 class="s-h" style="margin:0 0 4px">[Name]</h3><p>[Short bio and where to find them.] <a href="/support">Contact and support</a></p></div></div>
 	</div>
 </section>
 @endsection

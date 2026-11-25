@@ -140,3 +140,9 @@
 Home rebuilt to the new export (trust strip, switching row, Free vs Pro cards, three steps, privacy block, FAQ, CTA), page height 5077 vs 5078 px. Scroll reveal, card lift, floating hero mockup, FAQ chevron (all off under reduced motion).
 
 Not done: dark and mobile Home not compared pixel by pixel; other pages only checked by height and structure.
+
+## Site pages matched to the PNG export, docs split into pages
+
+Compared every page against the PNG export at 1440px (light), plus dark Home and the mobile menu. Fixed: footer links (all pages), Pricing (price note, refund text, forum cell, tax FAQ), Compare (section and button), Support (cards and form), About (person card), Changelog (version, pill, date), Home (icons, switching row, spacing), mobile menu and footer. Docs is now 11 pages in four groups (config/docs.php) with search across pages, TOC, copy button and previous/next.
+
+Not done: Blog post PNG not compared (no posts exist); Pricing dark and Home mobile only checked for overflow; the three Pro and WP-CLI docs pages are drafts (noindex); Hooks page not restyled.

@@ -169,3 +169,28 @@ a.s-pill { text-decoration: none; }
 @keyframes s-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(19,128,77,0); } 50% { box-shadow: 0 0 0 5px rgba(19,128,77,.12); } }
 @media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; } .s-shot, .s-pill.ok { animation: none; } }
 .s-head .s-brand span { display: inline-flex; gap: .3em; }
+
+/* Docs, matched to the canvas */
+.s-doc-intro { font: 400 18px/24px var(--font); color: var(--muted); margin: 0 0 32px; }
+.s-prose section h2 { margin-top: 40px; }
+.s-code .s-copy { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); min-height: 28px; padding: 0 10px; border: 1px solid var(--field-border); border-radius: var(--r-sm); background: var(--surface); color: var(--accent-dark); font: 600 12px/1 var(--font); cursor: pointer; }
+.s-pn { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); margin-top: 48px; padding-top: 24px; color: var(--muted); font-size: 14px; }
+.s-results { list-style: none; margin: 8px 0 0; padding: 4px; max-width: 480px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); box-shadow: var(--shadow-float); position: relative; z-index: 5; }
+.s-results li { padding: 8px 12px; font-size: 14px; color: var(--muted); }
+.s-results a { color: var(--ink); text-decoration: none; font-weight: 600; display: block; }
+.s-results li:hover { background: var(--accent-soft); }
+.s-trust { padding: 57px 0; }
+.s-switch { justify-content: flex-start; gap: 56px; align-items: flex-start; }
+.s-switch > div:first-child { max-width: 560px; }
+.s-chips { margin-top: 99px; }
+@media (max-width: 900px) { .s-trust { padding: 32px 0; } .s-chips { margin-top: 0; } }
+.s-person { display: flex; gap: 24px; align-items: center; padding: 24px; }
+.s-avatar { flex: none; width: 80px; height: 80px; border-radius: 50%; border: 1px dashed var(--accent-dark); background: var(--accent-soft); display: grid; place-items: center; font: 500 11px/1 var(--font); color: var(--muted); }
+.s-rel h2 .s-pill { vertical-align: middle; }
+@media (max-width: 700px) { .s-foot .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.s-menu { align-self: center; }
+.s-menu .x { display: none; }
+.s-menu[open] .x { display: block; }
+.s-menu[open] .bars { display: none; }
+.s-menu[open] summary { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-dark); }
+.s-menu summary svg { grid-area: 1 / 1; }

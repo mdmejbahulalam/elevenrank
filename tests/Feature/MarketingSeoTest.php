@@ -37,7 +37,10 @@ class MarketingSeoTest extends TestCase
         $this->get('/features')->assertOk()->assertSee('On this page')->assertSee('id="editor"', false);
         $this->get('/pro')->assertOk()->assertSee('Launch safety')->assertSee('Where Pro stands today');
         $this->get('/docs')->assertOk()->assertSee('Search the docs');
-        $this->get('/changelog?product=pro')->assertOk()->assertSee('0.1.0')->assertDontSee('ElevenRank (free) 1.1.0');
-        $this->get('/changelog')->assertOk()->assertSee('ElevenRank (free) 1.0.0');
+        $this->get('/changelog?product=pro')->assertOk()->assertSee('0.1.0')->assertDontSee('1.1.0');
+        $this->get('/changelog')->assertOk()->assertSee('1.0.0')->assertSee('Free plugin');
+        $this->get('/docs/import')->assertOk()->assertSee('Check what would change')->assertSee('Previous:');
+        $this->get('/docs/wp-cli')->assertOk()->assertSee('noindex', false);
+        $this->get('/docs/nope')->assertNotFound();
     }
 }

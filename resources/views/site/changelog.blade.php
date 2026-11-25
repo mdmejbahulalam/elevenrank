@@ -27,7 +27,8 @@ $releases = [
 			@foreach ($releases as $r)
 				@if ($product === 'all' || $product === $r['product'])
 					<div id="{{ $r['product'] }}-{{ str_replace('.', '-', $r['version']) }}">
-						<h2 class="s-h" style="margin:0">{{ $r['product'] === 'pro' ? 'ElevenRank Pro' : 'ElevenRank (free)' }} {{ $r['version'] }} <span class="s-pill {{ $r['product'] === 'pro' ? 'info' : 'ok' }}" style="margin-left:8px">{{ $r['note'] ?? ($r['product'] === 'pro' ? 'Pro' : 'Free plugin') }}</span></h2>
+						<h2 class="s-h" style="margin:0">{{ $r['version'] }} <span class="s-pill {{ $r['product'] === 'pro' ? 'info' : 'ok' }}" style="margin-left:8px">{{ $r['product'] === 'pro' ? 'Pro' : 'Free plugin' }}</span></h2>
+						<p class="s-meta" style="margin:4px 0 0">[Release date]</p>
 						<ul style="margin-top:12px">@foreach ($r['items'] as $i)<li>{{ $i }}</li>@endforeach</ul>
 					</div>
 				@endif

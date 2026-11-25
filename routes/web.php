@@ -19,8 +19,16 @@ Route::view('/', 'site.home');
 Route::view('features', 'site.features');
 Route::view('pro', 'site.pro');
 Route::get('pricing', [SiteController::class, 'pricing']);
-Route::view('docs', 'site.docs');
 Route::view('docs/hooks', 'site.hooks');
+Route::get('docs/{slug?}', function (?string $slug = null) {
+    $slug = $slug ?: 'getting-started';
+    foreach (config('docs.groups') as $group => $pages) {
+        if (isset($pages[$slug]) && ! isset($pages[$slug]['external'])) {
+            return view('site.docs', ['slug' => $slug, 'page' => $pages[$slug] + ['group' => $group]]);
+        }
+    }
+    abort(404);
+})->where('slug', '[a-z0-9-]+');
 Route::view('changelog', 'site.changelog');
 Route::view('support', 'site.support');
 Route::view('about', 'site.about');

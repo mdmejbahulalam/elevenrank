@@ -18,6 +18,7 @@
 				</div>
 			@endforeach
 		</div>
+		<p class="s-muted s-small" style="margin:20px 0 0">Prices shown are placeholders. Plans and prices come from the plans table.</p>
 	</div>
 </section>
 
@@ -25,7 +26,7 @@
 	<div class="s-wrap">
 		<div class="s-grid">
 			<div><h2 class="s-h">GPL, no lock-in</h2><p class="s-muted" style="margin:0">Pro is GPL like WordPress. The key unlocks updates, downloads and support.</p></div>
-			<div><h2 class="s-h">14-day refund</h2><p class="s-muted" style="margin:0">Ask within 14 days of any payment, including renewals, and the order is refunded. See the <a href="/refunds">refund policy</a>.</p></div>
+			<div><h2 class="s-h">14-day refund</h2><p class="s-muted" style="margin:0">Ask within 14 days of any payment, including renewals, and the order is refunded.</p></div>
 			<div><h2 class="s-h">Keeps working</h2><p class="s-muted" style="margin:0">When a term ends, Pro keeps running on your sites. Only updates and support stop.</p></div>
 		</div>
 	</div>
@@ -46,7 +47,7 @@
 					<tr><td>Rank tracker and Search Console figures</td><td class="c">Not included</td><td class="c">Included</td></tr>
 					<tr><td>AI writer (your own AI account)</td><td class="c">Not included</td><td class="c">Included</td></tr>
 					<tr><td>Launch and staging safety</td><td class="c">Not included</td><td class="c">Included</td></tr>
-					<tr><td>Updates and support</td><td class="c">Community</td><td class="c">For the licence term</td></tr>
+					<tr><td>Updates and support</td><td class="c">WordPress.org forum</td><td class="c">For the licence term</td></tr>
 				</tbody>
 			</table>
 		</div>
@@ -60,6 +61,7 @@
 		<details><summary>What happens when my licence ends?</summary><p>Pro keeps working on your sites. You stop receiving updates and support until you renew.</p></details>
 		<details><summary>Can I move a licence to another site?</summary><p>Yes. Deactivate the site in your account or from the plugin, then activate the new one.</p></details>
 		<details><summary>How does the refund work?</summary><p>Ask within 14 days of purchase and the order is refunded in full. The key is then switched off. See the <a href="/refunds">refund policy</a>.</p></details>
+		<details><summary>Is tax included?</summary><p>Tax is worked out at checkout and shown before you pay.</p></details>
 	</div>
 </section>
 @endsection
