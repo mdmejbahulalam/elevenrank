@@ -11,7 +11,11 @@
 		body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
 		header { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; background:var(--card); border-bottom:1px solid var(--line); }
 		header strong { letter-spacing:.01em; }
-		main { max-width:760px; margin:32px auto; padding:0 16px; }
+		main { max-width:1000px; margin:32px auto; padding:0 16px; }
+		header nav { flex-wrap:wrap; } header nav a { font-size:.92rem; }
+		input[type=text], input[type=number], textarea { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:var(--bg); color:var(--ink); font:inherit; }
+		.flash { background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:16px; }
+		.grid { display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); margin-bottom:20px; } .stat { font-size:1.8rem; font-weight:800; }
 		.card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:20px; }
 		h1 { font-size:1.4rem; margin:0 0 16px; } h2 { font-size:1.05rem; margin:0 0 12px; }
 		label { display:block; font-weight:600; margin:12px 0 6px; }
@@ -29,12 +33,19 @@
 		<strong>ElevenRank HQ</strong>
 		@auth
 			<nav style="display:flex;gap:16px;align-items:center">
-				<a href="/admin/releases">Releases</a>
+				<a href="/admin">Overview</a>
+				<a href="/admin/customers">Customers</a>
+				<a href="/admin/orders">Orders</a>
 				<a href="/admin/licences">Licences</a>
+				<a href="/admin/releases">Releases</a>
+				<a href="/admin/tickets">Tickets</a>
+				<a href="/admin/plans">Plans</a>
+				<a href="/admin/audit">Audit</a>
+				<a href="/admin/system">System</a>
 				<form method="post" action="/admin/logout">@csrf<button class="link">Sign out</button></form>
 			</nav>
 		@endauth
 	</header>
-	<main>@yield('content')</main>
+	<main>@if (session('status'))<div class="flash" role="status">{{ session('status') }}</div>@endif @yield('content')</main>
 </body>
 </html>

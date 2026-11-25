@@ -40,6 +40,12 @@
 						<input type="hidden" name="status" value="{{ $l->status === 'active' ? 'revoked' : 'active' }}">
 						<button class="link">{{ $l->status === 'active' ? 'Revoke' : 'Reinstate' }}</button>
 					</form>
+					<form method="post" action="/admin/licences/{{ $l->id }}" style="display:flex;gap:6px;margin-top:6px;align-items:center">
+						@csrf
+						<input type="number" name="extend_months" min="0" max="120" placeholder="+months" style="width:90px" aria-label="Extend by months">
+						<input type="number" name="site_limit" min="0" placeholder="sites" style="width:80px" aria-label="Site limit">
+						<button class="link">Update</button>
+					</form>
 				</td>
 			</tr>
 		@endforeach

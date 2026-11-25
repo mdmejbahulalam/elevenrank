@@ -33,6 +33,27 @@ class LicenceController extends Controller
         return redirect('/admin/licences')->with('created', $licence->license_key);
     }
 
+    /** Extend the term or change the site limit of an existing licence. */
+    public function update(Request $request, Licence $licence): RedirectResponse
+    {
+        $data = $request->validate([
+            'extend_months' => ['nullable', 'integer', 'min:0', 'max:120'],
+            'site_limit' => ['nullable', 'integer', 'min:0', 'max:1000'],
+        ]);
+
+        if (! empty($data['extend_months'])) {
+            $base = $licence->expires && $licence->expires->isFuture() ? $licence->expires : now();
+            $licence->expires = $base->copy()->addMonths((int) $data['extend_months']);
+        }
+        if (isset($data['site_limit'])) {
+            $licence->site_limit = (int) $data['site_limit'];
+        }
+        $licence->save();
+        \App\Models\AuditLog::record('licence.updated', $licence->license_key);
+
+        return redirect('/admin/licences');
+    }
+
     public function setStatus(Request $request, Licence $licence): RedirectResponse
     {
         $licence->update(['status' => $request->input('status') === 'active' ? 'active' : 'revoked']);

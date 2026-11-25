@@ -24,6 +24,21 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function licences(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Licence::class);
+    }
+
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function tickets(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
