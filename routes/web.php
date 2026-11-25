@@ -112,10 +112,13 @@ Route::prefix('admin')->group(function () {
         Route::middleware('can:staff.customers')->group(function () {
             Route::get('customers', [StaffController::class, 'customers']);
             Route::get('customers/{user}', [StaffController::class, 'customer']);
+            Route::post('customers/{user}/note', [StaffController::class, 'saveNote']);
         });
         Route::get('orders', [StaffController::class, 'orders'])->middleware('can:staff.orders.view');
         Route::get('orders.csv', [StaffController::class, 'ordersCsv'])->middleware('can:staff.orders.view');
         Route::post('orders/{order}', [StaffController::class, 'orderAction']); // each action is authorised inside
+        Route::get('orders/{order:number}', [StaffController::class, 'order'])->middleware('can:staff.orders.view');
+        Route::post('orders/{order:number}/receipt', [StaffController::class, 'resendReceipt'])->middleware('can:staff.orders.view');
         Route::middleware('can:staff.plans')->group(function () {
             Route::get('plans', [StaffController::class, 'plans']);
             Route::post('plans/{plan}', [StaffController::class, 'updatePlan']);
@@ -136,6 +139,8 @@ Route::prefix('admin')->group(function () {
             Route::post('licences', [LicenceController::class, 'store']);
             Route::post('licences/{licence}', [LicenceController::class, 'update']);
             Route::post('licences/{licence}/status', [LicenceController::class, 'setStatus']);
+            Route::get('licences/{licence}', [LicenceController::class, 'show']);
+            Route::post('licences/{licence}/deactivate', [LicenceController::class, 'deactivate']);
         });
         Route::middleware('can:staff.releases')->group(function () {
             Route::get('releases', [ReleaseController::class, 'index']);

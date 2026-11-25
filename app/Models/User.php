@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'billing_address',
         'billing_country',
+        'staff_note',
     ];
 
     public function licences(): \Illuminate\Database\Eloquent\Relations\HasMany

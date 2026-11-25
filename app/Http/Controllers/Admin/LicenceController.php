@@ -10,9 +10,34 @@ use Illuminate\View\View;
 
 class LicenceController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        return view('admin.licences', ['licences' => Licence::withCount('activations')->latest('id')->limit(200)->get()]);
+        $q = trim((string) $request->query('q'));
+        $status = (string) $request->query('status', '');
+        $ends = (string) $request->query('ends', '');
+        $licences = Licence::with(['plan', 'user'])->withCount('activations')
+            ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('license_key', 'like', "%{$q}%")->orWhere('email', 'like', "%{$q}%")))
+            ->when($status === 'revoked', fn ($query) => $query->where('status', 'revoked'))
+            ->when($status === 'active', fn ($query) => $query->where('status', 'active')->where(fn ($w) => $w->whereNull('expires')->orWhere('expires', '>', now())))
+            ->when($status === 'expired', fn ($query) => $query->where('status', 'active')->where('expires', '<=', now()))
+            ->when($ends === '30', fn ($query) => $query->where('status', 'active')->whereBetween('expires', [now(), now()->addDays(30)]))
+            ->latest('id')->limit(200)->get();
+
+        return view('admin.licences', compact('licences', 'q', 'status', 'ends'));
+    }
+
+    public function show(Licence $licence): View
+    {
+        return view('admin.licence', ['licence' => $licence->load(['plan', 'user', 'activations']), 'order' => \App\Models\Order::where('licence_id', $licence->id)->first()]);
+    }
+
+    public function deactivate(Request $request, Licence $licence): RedirectResponse
+    {
+        $site = Licence::normaliseSite((string) $request->validate(['site' => ['required', 'string', 'max:190']])['site']);
+        $licence->deactivateSite($site);
+        \App\Models\AuditLog::record('licence.site_deactivated', $licence->license_key.' '.$site);
+
+        return back()->with('status', 'Site deactivated.');
     }
 
     public function store(Request $request): RedirectResponse
@@ -56,8 +81,14 @@ class LicenceController extends Controller
 
     public function setStatus(Request $request, Licence $licence): RedirectResponse
     {
-        $licence->update(['status' => $request->input('status') === 'active' ? 'active' : 'revoked']);
+        $active = $request->input('status') === 'active';
+        $reason = $active ? null : $request->validate(['reason' => ['required', 'string', 'min:3', 'max:255']])['reason'];
+        $licence->update(['status' => $active ? 'active' : 'revoked']);
+        \App\Models\AuditLog::record($active ? 'licence.reinstated' : 'licence.revoked', $licence->license_key, $reason);
+        if (! $active) {
+            app(\App\Services\Notifier::class)->revoked($licence);
+        }
 
-        return redirect('/admin/licences');
+        return back()->with('status', $active ? 'Licence reinstated.' : 'Licence revoked.');
     }
 }

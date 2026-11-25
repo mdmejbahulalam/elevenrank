@@ -43,6 +43,13 @@ class Notifier
         $this->send($order->user->email, 'refund', 'Your ElevenRank refund', ['number' => $order->number, 'amount' => $order->amount()]);
     }
 
+    public function revoked(Licence $licence): void
+    {
+        if ($licence->email) {
+            $this->send($licence->email, 'revoked', 'Your ElevenRank licence was revoked', ['key' => $licence->license_key]);
+        }
+    }
+
     public function ticketReply(Ticket $ticket, string $body): void
     {
         $this->send($ticket->user->email, 'ticket_reply', 'New reply on your ticket: '.$ticket->subject, [

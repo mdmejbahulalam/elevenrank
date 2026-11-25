@@ -23,40 +23,85 @@ class StaffController extends Controller
 {
     public function overview(): View
     {
-        $paid = Order::where('status', 'paid');
+        $weeks = collect(range(7, 0))->map(function ($i) {
+            $from = now()->startOfWeek()->subWeeks($i);
+
+            return Order::where('created_at', '>=', $from)->where('created_at', '<', $from->copy()->addWeek())->count();
+        });
+        $oldest = Ticket::where('status', 'open')->oldest('updated_at')->first();
 
         return view('admin.overview', [
-            'customers' => User::where('is_admin', false)->count(),
             'licences' => Licence::where('status', 'active')->count(),
-            'sites' => Activation::count(),
-            'pending' => Order::where('status', 'pending')->count(),
-            'revenue' => (clone $paid)->where('paid_at', '>=', now()->startOfMonth())->sum('amount_cents') / 100,
+            'revenue' => Order::where('status', 'paid')->where('paid_at', '>=', now()->subDays(30))->sum('amount_cents') / 100,
             'openTickets' => Ticket::where('status', '!=', 'closed')->count(),
+            'pending' => Order::where('status', 'pending')->count(),
+            'weeks' => $weeks,
+            'refunds' => Ticket::where('status', '!=', 'closed')->where('subject', 'like', '%refund%')->count(),
+            'waiting' => Ticket::where('status', 'open')->count(),
+            'oldestDays' => $oldest ? (int) $oldest->updated_at->diffInDays(now()) : 0,
             'expiring' => Licence::where('status', 'active')->whereBetween('expires', [now(), now()->addDays(30)])->count(),
+            'activity' => AuditLog::with('user')->latest('id')->limit(5)->get(),
         ]);
     }
 
     public function customers(Request $request): View
     {
         $q = trim((string) $request->query('q'));
-        $users = User::where('is_admin', false)->withCount(['licences', 'orders'])
+        $plan = $request->query('plan');
+        $users = User::where('is_admin', false)->withCount(['licences', 'orders'])->with(['licences' => fn ($l) => $l->with('plan')->latest('id')])
             ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('email', 'like', "%{$q}%")->orWhere('name', 'like', "%{$q}%")))
+            ->when($plan, fn ($query) => $query->whereHas('licences', fn ($l) => $l->where('plan_id', $plan)))
             ->latest('id')->limit(200)->get();
 
-        return view('admin.customers', ['users' => $users, 'q' => $q]);
+        return view('admin.customers', ['users' => $users, 'q' => $q, 'plan' => $plan, 'plans' => Plan::orderBy('sort')->get()]);
     }
 
     public function customer(User $user): View
     {
-        return view('admin.customer', ['user' => $user, 'licences' => $user->licences()->withCount('activations')->get(), 'orders' => $user->orders()->with('plan')->latest('id')->get()]);
+        return view('admin.customer', [
+            'user' => $user,
+            'licences' => $user->licences()->with('plan')->withCount('activations')->get(),
+            'orders' => $user->orders()->with('plan')->latest('id')->get(),
+            'tickets' => $user->tickets()->latest('updated_at')->get(),
+        ]);
+    }
+
+    public function saveNote(Request $request, User $user): RedirectResponse
+    {
+        $user->forceFill(['staff_note' => $request->validate(['staff_note' => ['nullable', 'string', 'max:1000']])['staff_note']])->save();
+        AuditLog::record('customer.note', $user->email);
+
+        return back()->with('status', 'Note saved.');
     }
 
     public function orders(Request $request): View
     {
         $status = (string) $request->query('status', '');
-        $orders = Order::with(['user', 'plan'])->when($status !== '', fn ($q) => $q->where('status', $status))->latest('id')->limit(200)->get();
+        $q = trim((string) $request->query('q'));
+        $range = (string) $request->query('range', '');
+        $orders = Order::with(['user', 'plan'])
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->when($q !== '', fn ($query) => $query->where(fn ($w) => $w->where('number', 'like', "%{$q}%")->orWhereHas('user', fn ($u) => $u->where('email', 'like', "%{$q}%")->orWhere('name', 'like', "%{$q}%"))))
+            ->when(ctype_digit($range) && $range !== '', fn ($query) => $query->where('created_at', '>=', now()->subDays((int) $range)))
+            ->latest('id')->limit(200)->get();
 
-        return view('admin.orders', ['orders' => $orders, 'status' => $status]);
+        return view('admin.orders', ['orders' => $orders, 'status' => $status, 'q' => $q, 'range' => $range]);
+    }
+
+    public function order(Order $order): View
+    {
+        $refundAsked = Ticket::where('user_id', $order->user_id)->where('status', '!=', 'closed')->where('subject', 'like', '%refund%')->latest('id')->first();
+
+        return view('admin.order', ['order' => $order->load(['user', 'plan', 'licence']), 'refundAsked' => $refundAsked]);
+    }
+
+    public function resendReceipt(Order $order, \App\Services\Notifier $notifier): RedirectResponse
+    {
+        abort_unless($order->status === 'paid', 422);
+        $notifier->receipt($order);
+        AuditLog::record('order.receipt_resent', $order->number);
+
+        return back()->with('status', 'Receipt sent again.');
     }
 
     public function orderAction(Request $request, Order $order, Fulfilment $fulfilment): RedirectResponse

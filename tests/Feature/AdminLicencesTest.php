@@ -60,7 +60,8 @@ class AdminLicencesTest extends TestCase
         $licence = Licence::issue('a@example.com', 1, now()->addYear());
         $body = ['key' => $licence->license_key, 'site' => 'x.test'];
 
-        $this->post("/admin/licences/{$licence->id}/status", ['status' => 'revoked'])->assertRedirect('/admin/licences');
+        $this->post("/admin/licences/{$licence->id}/status", ['status' => 'revoked', 'reason' => 'Chargeback'])->assertRedirect();
+        $this->post("/admin/licences/{$licence->id}/status", ['status' => 'revoked'])->assertSessionHasErrors('reason');
         $this->postJson('/wp-json/elevenrank-licence/v1/check', $body)->assertJson(['status' => 'revoked']);
 
         $this->post("/admin/licences/{$licence->id}/status", ['status' => 'active']);

@@ -12,7 +12,7 @@
 	@auth
 	<div class="a-user">
 		<span class="h-role">{{ ucfirst(str_replace('_', ' ', auth()->user()->staffRole() ?? 'staff')) }}</span>
-		<span class="nm">{{ auth()->user()->name }}</span>
+		<span class="nm">{{ strtok(auth()->user()->name, ' ') }} (staff)</span>
 		<span class="a-av" aria-hidden="true">{{ strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}</span>
 		<form method="post" action="/admin/logout">@csrf<button class="a-btn secondary sm">Sign out</button></form>
 	</div>
@@ -21,11 +21,10 @@
 @auth
 <div class="a-shell hq">
 	<nav class="a-side" aria-label="Staff">
-		<form method="get" action="/admin/search" role="search"><input type="search" name="q" placeholder="Search" aria-label="Search customers, keys, orders"></form>
-		@foreach ([[null, '/admin', 'Overview', 'admin', 'staff.overview'], ['Sales', '/admin/customers', 'Customers', 'admin/customers*', 'staff.customers'], [null, '/admin/orders', 'Orders', 'admin/orders*', 'staff.orders.view'], [null, '/admin/licences', 'Licences', 'admin/licences*', 'staff.licences'], ['Product', '/admin/releases', 'Releases', 'admin/releases*', 'staff.releases'], [null, '/admin/plans', 'Plans', 'admin/plans*', 'staff.plans'], ['Support', '/admin/tickets', 'Tickets', 'admin/tickets*', 'staff.tickets'], ['System', '/admin/audit', 'Audit log', 'admin/audit', 'staff.audit'], [null, '/admin/system', 'System', 'admin/system', 'staff.system']] as [$grp, $href, $label, $pat, $can])
+		@foreach ([[null, '/admin', 'Overview', 'admin', 'staff.overview'], ['Sales', '/admin/customers', 'Customers', 'admin/customers*', 'staff.customers'], [null, '/admin/licences', 'Licences', 'admin/licences*', 'staff.licences'], [null, '/admin/orders', 'Orders', 'admin/orders*', 'staff.orders.view'], ['Product', '/admin/releases', 'Releases', 'admin/releases*', 'staff.releases'], [null, '/admin/plans', 'Plans', 'admin/plans*', 'staff.plans'], ['Support', '/admin/tickets', 'Tickets', 'admin/tickets*', 'staff.tickets'], ['System', '/admin/staff', 'Staff', 'admin/staff*', 'staff.staff'], [null, '/admin/webhooks', 'Webhooks', 'admin/webhooks*', 'staff.webhooks'], [null, '/admin/audit', 'Audit log', 'admin/audit*', 'staff.audit'], [null, '/admin/settings', 'Settings', 'admin/settings*', 'staff.system']] as [$grp, $href, $label, $pat, $can])
 			@continue(! \Illuminate\Support\Facades\Gate::allows($can))
 			@if ($grp)<p class="grp">{{ $grp }}</p>@endif
-			<a class="l @if(request()->is($pat)) on @endif" href="{{ $href }}" @if(request()->is($pat)) aria-current="page" @endif>{{ $label }}</a>
+			<a class="l @if(request()->is($pat)) on @endif" href="{{ $href }}" @if(request()->is($pat)) aria-current="page" @endif><span class="ring" aria-hidden="true"></span>{{ $label }}</a>
 		@endforeach
 	</nav>
 	<main id="main" class="a-main">

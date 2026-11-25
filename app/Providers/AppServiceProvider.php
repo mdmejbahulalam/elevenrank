@@ -18,10 +18,12 @@ class AppServiceProvider extends ServiceProvider
         'staff.orders.refund' => ['finance'],
         'staff.licences' => ['support'],
         'staff.tickets' => ['support'],
-        'staff.plans' => [],
+        'staff.plans' => ['finance'],
         'staff.releases' => [],
         'staff.system' => [],
         'staff.audit' => [],
+        'staff.staff' => [],
+        'staff.webhooks' => [],
     ];
 
     public function register(): void
