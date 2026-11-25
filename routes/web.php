@@ -24,6 +24,14 @@ Route::view('docs/hooks', 'site.hooks');
 Route::view('changelog', 'site.changelog');
 Route::view('support', 'site.support');
 Route::view('about', 'site.about');
+Route::view('compare/yoast-seo', 'site.compare');
+Route::get('blog', fn () => view('site.blog', ['posts' => config('blog.posts')]));
+Route::get('blog/{slug}', function (string $slug) {
+	$post = collect(config('blog.posts'))->firstWhere('slug', $slug);
+	abort_unless($post, 404);
+
+	return view('site.blog-post', ['post' => $post, 'related' => collect(config('blog.posts'))->where('slug', '!=', $slug)->take(3)]);
+});
 Route::get('robots.txt', [SeoFilesController::class, 'robots']);
 Route::get('sitemap.xml', [SeoFilesController::class, 'sitemap']);
 Route::get('llms.txt', [SeoFilesController::class, 'llms']);

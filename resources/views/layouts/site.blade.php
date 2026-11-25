@@ -61,9 +61,9 @@ $nav = [['/features', 'Features', 'features'], ['/pro', 'Pro', 'pro'], ['/pricin
 				<a class="s-brand" href="/"><img src="/assets/mark.svg" alt="" width="32" height="32"><span>Eleven<b>Rank</b></span></a>
 				<p class="s-muted s-small" style="margin:12px 0 0;max-width:280px">Free all-in-one SEO for WordPress. No tracking, no outside connections.</p>
 			</div>
-			<div><h4>Product</h4><a href="/features">Features</a><a href="/pro">ElevenRank Pro</a><a href="/pricing">Pricing</a><a href="/changelog">Changelog</a></div>
+			<div><h4>Product</h4><a href="/features">Features</a><a href="/pro">ElevenRank Pro</a><a href="/pricing">Pricing</a><a href="/changelog">Changelog</a><a href="/compare/yoast-seo">Switching from Yoast</a></div>
 			<div><h4>Help</h4><a href="/docs">Documentation</a><a href="/docs/hooks">Developer hooks</a><a href="/support">Support</a></div>
-			<div><h4>Company</h4><a href="/about">About</a><a href="/account/login">Sign in</a></div>
+			<div><h4>Company</h4><a href="/about">About</a><a href="/blog">Blog</a><a href="/account/login">Sign in</a></div>
 			<div><h4>Legal</h4><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/refunds">Refunds</a><a href="/gpl">GPL</a></div>
 		</div>
 		<p class="legal">© {{ date('Y') }} ElevenRank. WordPress is a trademark of the WordPress Foundation; ElevenRank is not affiliated with it.</p>

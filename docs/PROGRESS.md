@@ -114,3 +114,7 @@
 ## Marketing pages matched to the Site canvas
 - Features, Pro, Pricing, Docs, Changelog, Support, About, legal pages and the 404 page now follow the canvas boards (styles in resources/css/home.css). 53 tests pass.
 - Not done: Hooks page keeps its older layout; Blog, Blog post and Compare boards have no pages yet; screenshots are placeholders; account, admin and sign-in pages are not matched (no canvas read for them); checked visually only in a small browser pane.
+
+## Blog and Compare pages
+- /blog, /blog/{slug} (posts read from config/blog.php until the content store exists; empty state and noindex while there are none) and /compare/yoast-seo (Yoast column marked Not yet checked, noindex until each cell is verified). Footer links added. 56 tests pass.
+- Not done: real posts, cover images, the verified Yoast comparison, sitemap entries for these pages, Hooks page restyle.
