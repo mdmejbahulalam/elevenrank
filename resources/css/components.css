@@ -24,7 +24,7 @@ button.link { background: none; border: 0; padding: 0; color: var(--muted); font
 .alert.ok { background: var(--ok-soft); border-color: var(--ok); } .alert.warn { background: var(--warn-soft); border-color: var(--warn); }
 .alert.bad { background: var(--bad-soft); border-color: var(--bad); } .alert.info { background: var(--info-soft); border-color: var(--info); }
 label { display: block; font-weight: 600; font-size: var(--t-14); margin: 16px 0 4px; }
-input[type=text], input[type=email], input[type=password], input[type=number], input[type=file], textarea, select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--field-border); border-radius: var(--r-sm); background: var(--surface); color: var(--ink); font: inherit; }
+input[type=search], input[type=text], input[type=email], input[type=password], input[type=number], input[type=file], textarea, select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid var(--field-border); border-radius: var(--r-sm); background: var(--surface); color: var(--ink); font: inherit; }
 input[aria-invalid="true"] { border: 2px solid var(--bad); }
 .help { font-size: var(--t-12); color: var(--muted); margin-top: 4px; }
 .field-error { color: var(--bad); font-weight: 500; font-size: var(--t-14); margin-top: 4px; }

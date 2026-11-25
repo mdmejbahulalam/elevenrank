@@ -58,3 +58,8 @@
 - Product screenshots (need real captures from the dev site), Features sticky nav, Pro four-group layout and "what Pro is not" box driven by Content, Compare pages (need verified facts and dates), Blog, docs sidebar and search, changelog filter, Content store (`resources/content/*.md`), generated OG image, `Product`+`Offer` and `FAQPage` JSON-LD (prices are placeholders), 500 and maintenance pages.
 - Not run: Lighthouse, axe, schema validation, link check, copy honesty review.
 - Placeholders: `FREE_PLUGIN_URL` slug is unconfirmed; About text is a slot.
+
+### Phase 2 continued (2026-11-25)
+- Features: sticky in-page nav with anchors. Pro: the 15 features in four groups (On-page, Crawl control, Analysis, Launch safety) and a "What Pro is not (yet)" box read from `config/site.php` (`pro_version`, `pro_status`). Docs: sidebar and client-side search with a no-result message, "last updated" line. Changelog: filter by product (`?product=free|pro`) and an anchor per version.
+- Tests: 32 passed, 281 assertions. Site CSS 12.3 KB (3.5 KB gzip).
+- Still open in Phase 2: product screenshots, Compare pages, Blog, Content store, generated OG image, docs split into `/docs/{slug}` pages with prev/next, Lighthouse, axe, schema validation, link check.

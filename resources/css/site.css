@@ -32,3 +32,10 @@ ol.steps li { counter-increment: s; background: var(--surface); border: 1px soli
 ol.steps li::before { content: counter(s); width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent-dark); display: grid; place-items: center; font-weight: 700; }
 ol.steps span { color: var(--muted); }
 .trust { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0 0; padding: 0; list-style: none; } .trust li { padding: 6px 12px; border-radius: 999px; background: var(--ok-soft); color: var(--ok); font-weight: 600; font-size: var(--t-14); }
+.with-toc { display: grid; gap: 32px; grid-template-columns: 220px 1fr; align-items: start; margin-top: 24px; }
+.toc { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 2px; font-size: var(--t-14); }
+.toc a { color: var(--muted); text-decoration: none; padding: 6px 10px; border-radius: var(--r-sm); } .toc a:hover { color: var(--accent); background: var(--accent-soft); }
+.toc strong { font-size: var(--t-12); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 0 10px 6px; }
+.toc input { margin-bottom: 8px; }
+[hidden] { display: none !important; }
+@media (max-width: 800px) { .with-toc { grid-template-columns: 1fr; } .toc { position: static; flex-direction: row; flex-wrap: wrap; } }

@@ -31,4 +31,13 @@ class MarketingSeoTest extends TestCase
     {
         $this->get('/no-such-page')->assertNotFound()->assertSee('Page not found');
     }
+
+    public function test_content_pages_render_their_new_sections(): void
+    {
+        $this->get('/features')->assertOk()->assertSee('On this page')->assertSee('id="editor"', false);
+        $this->get('/pro')->assertOk()->assertSee('Launch safety')->assertSee('What Pro is not');
+        $this->get('/docs')->assertOk()->assertSee('Search the docs');
+        $this->get('/changelog?product=pro')->assertOk()->assertSee('0.1.0')->assertDontSee('ElevenRank (free) 1.1.0');
+        $this->get('/changelog')->assertOk()->assertSee('ElevenRank (free) 1.0.0');
+    }
 }
