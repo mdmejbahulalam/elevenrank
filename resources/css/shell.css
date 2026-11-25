@@ -79,10 +79,11 @@ a.a-btn.ghost { color: var(--accent); padding: 0 12px; }
 .h-stat .l { font: 500 14px/20px var(--font); color: var(--muted); margin: 0; }
 .h-stat .l a { color: var(--muted); }
 /* sign-in pages and detail views */
-.a-auth { min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; }
+.a-auth { min-height: 100vh; display: grid; place-items: start center; padding: 48px 16px; }
 .a-auth .box { width: 100%; max-width: 420px; }
 .a-auth .a-brand { justify-content: center; margin-bottom: 24px; }
 .a-auth h1 { font: 600 20px/28px var(--font); }
+.a-auth .box > p { text-align: center; }
 .a-msg { border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; background: var(--surface); max-width: 640px; }
 .a-msg.staff { background: var(--accent-soft); margin-left: auto; }
 .a-msg .who { font: 600 12px/16px var(--font); color: var(--muted); margin: 0 0 6px; letter-spacing: .04em; text-transform: uppercase; }
@@ -106,3 +107,18 @@ a.a-btn.ghost { color: var(--accent); padding: 0 12px; }
 /* Account: danger button, mono cells, modal buttons */
 button.a-btn.danger { background: var(--bad); color: #fff; }
 .a-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+
+/* Checkout */
+.a-checkout { display: grid; grid-template-columns: minmax(0, 1fr) 404px; gap: 24px; align-items: start; }
+.a-checkout > aside { position: sticky; top: 88px; }
+.a-checkout input[readonly] { background: var(--surface); }
+.a-label { display: block; margin: 14px 0 6px; font: 600 13px/18px var(--font); }
+.a-radio { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; }
+.a-radio:first-of-type { border-top: 0; }
+.a-radio .dot { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--field-border); display: grid; place-items: center; color: #fff; font-size: 13px; }
+.a-radio.on .dot { background: var(--ok); border-color: var(--ok); }
+@media (max-width: 860px) { .a-checkout { grid-template-columns: 1fr; } .a-checkout > aside { position: static; } }
+.a-skel { display: grid; gap: 8px; justify-items: center; }
+.a-skel i { display: block; max-width: 100%; height: 16px; border-radius: 999px; background: linear-gradient(90deg, var(--sunken), var(--line), var(--sunken)); background-size: 200% 100%; animation: a-shimmer 1.6s linear infinite; }
+@keyframes a-shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .a-skel i { animation: none; } }

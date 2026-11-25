@@ -13,6 +13,11 @@ class Plan extends Model
         return ['active' => 'boolean'];
     }
 
+    public function priceFull(): string
+    {
+        return ($this->currency === 'USD' ? '$' : $this->currency.' ').number_format($this->price_cents / 100, 2);
+    }
+
     public function price(): string
     {
         return ($this->currency === 'USD' ? '$' : $this->currency.' ').number_format($this->price_cents / 100, $this->price_cents % 100 ? 2 : 0);

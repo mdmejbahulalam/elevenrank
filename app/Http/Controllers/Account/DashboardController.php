@@ -81,12 +81,16 @@ class DashboardController extends Controller
     {
         abort_unless($plan->active, 404);
 
-        return view('account.checkout', ['plan' => $plan]);
+        return view('account.checkout', ['plan' => $plan, 'plans' => Plan::where('active', true)->orderBy('sort')->get()]);
     }
 
     public function placeOrder(Request $request, Plan $plan): RedirectResponse
     {
         abort_unless($plan->active, 404);
+        $billing = $request->validate(['billing_country' => ['nullable', 'string', 'max:80']]);
+        if (! empty($billing['billing_country'])) {
+            $request->user()->forceFill(['billing_country' => $billing['billing_country']])->save();
+        }
 
         $order = Order::create([
             'number' => Order::nextNumber(),
@@ -111,21 +115,40 @@ class DashboardController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:190', 'unique:users,email,'.$user->id],
-            'current_password' => ['nullable', 'current_password'],
-            'password' => ['nullable', 'confirmed', Password::min(10)],
+            'billing_address' => ['nullable', 'string', 'max:190'],
         ]);
-
-        if (! empty($data['password']) && empty($data['current_password'])) {
-            return back()->withErrors(['current_password' => 'Enter your current password to set a new one.']);
-        }
-
-        $user->forceFill(['name' => $data['name'], 'email' => $data['email']]);
-        if (! empty($data['password'])) {
-            $user->password = Hash::make($data['password']);
-        }
-        $user->save();
+        $user->forceFill($data)->save();
 
         return back()->with('status', 'Profile saved.');
+    }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'confirmed', Password::min(10)],
+        ]);
+        $request->user()->forceFill(['password' => Hash::make($data['password'])])->save();
+
+        return back()->with('status', 'Password changed.');
+    }
+
+    /** Deleting is blocked while a licence is still live, so a customer cannot lose a paid key by accident. */
+    public function deleteAccount(Request $request): RedirectResponse
+    {
+        $request->validate(['delete_password' => ['required', 'current_password']]);
+        $user = $request->user();
+        if ($this->eligible($request)) {
+            return back()->withErrors(['delete' => 'You still have an active licence. Ask support to revoke it first, then delete your account.']);
+        }
+
+        AuditLog::record('account.deleted', $user->email);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->delete();
+
+        return redirect('/');
     }
 
     public function tickets(Request $request): View
@@ -133,11 +156,27 @@ class DashboardController extends Controller
         return view('account.tickets', ['tickets' => $request->user()->tickets()->latest('updated_at')->get()]);
     }
 
+    public function newTicket(Request $request): View
+    {
+        return view('account.ticket-new', ['sites' => $request->user()->licences()->with('activations')->get()->flatMap(fn ($l) => $l->activations->pluck('site'))->unique()->values()]);
+    }
+
+    public function solveTicket(Request $request, Ticket $ticket): RedirectResponse
+    {
+        abort_unless($ticket->user_id === $request->user()->id, 404);
+        $ticket->update(['status' => 'closed']);
+
+        return back()->with('status', 'Marked as solved. Reply on the ticket if it comes back.');
+    }
+
     public function storeTicket(Request $request): RedirectResponse
     {
-        $data = $request->validate(['subject' => ['required', 'string', 'max:160'], 'body' => ['required', 'string', 'max:5000'], 'site' => ['nullable', 'string', 'max:190']]);
+        $data = $request->validate(['subject' => ['required', 'string', 'max:160'], 'body' => ['required', 'string', 'max:5000'], 'site' => ['nullable', 'string', 'max:190'], 'topic' => ['nullable', 'string', 'max:60']]);
         $ticket = $request->user()->tickets()->create(['subject' => $data['subject']]);
         $body = ! empty($data['site']) ? 'Site: '.$data['site']."\n\n".$data['body'] : $data['body'];
+        if (! empty($data['topic'])) {
+            $body = 'Topic: '.$data['topic']."\n".$body;
+        }
         $ticket->replies()->create(['user_id' => $request->user()->id, 'is_staff' => false, 'body' => $body]);
 
         return redirect('/account/tickets/'.$ticket->id)->with('status', 'Ticket opened. We will reply here.');

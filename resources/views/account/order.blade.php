@@ -2,14 +2,14 @@
 @section('page', 'Order')
 @section('body')
 @if ($order->status === 'pending')
-<p class="a-eyebrow"><a href="/account/orders">Orders</a> / {{ $order->number }}</p>
-<h1 style="margin-bottom:24px">Order {{ $order->number }}</h1>
-	<section class="a-card"><div class="a-empty">
-		<div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
-		<h2 style="margin-bottom:8px">Waiting for your payment</h2>
-		<p class="a-muted" style="margin:0 0 20px">We have your order. Payment is being finalised, and we will send payment instructions to {{ auth()->user()->email }}. Your licence key appears here as soon as the payment is confirmed.</p>
-		<div class="a-row" style="justify-content:center"><a class="a-btn secondary" href="/account/orders">View orders</a><a class="a-btn ghost" href="/account/tickets">Paid but nothing here? Contact support</a></div>
-	</div></section>
+<section class="a-card" style="max-width:560px;margin:40px auto 0"><div class="a-empty">
+	<div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+	<h2 style="margin-bottom:8px">Waiting for your payment</h2>
+	<p class="a-muted" style="margin:0 0 20px">Order {{ $order->number }} is pending. This page updates on its own when the payment provider confirms. Your licence key appears here right after.</p>
+	<div class="a-skel" aria-hidden="true"><i style="width:334px"></i><i style="width:240px"></i></div>
+	<div class="a-row" style="justify-content:center;margin-top:24px"><a class="a-btn secondary" href="/account/orders">View orders</a><a class="a-btn ghost" href="/account/tickets">Paid but nothing here? Contact support</a></div>
+</div></section>
+<script>setTimeout(function(){location.reload()},20000)</script>
 @else
 @php
 	$canRefund = $order->status === 'paid' && $order->paid_at && $order->paid_at->gte(now()->subDays(14));

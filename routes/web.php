@@ -78,10 +78,14 @@ Route::prefix('account')->group(function () {
         Route::post('licences/{licence}/label', [SelfService::class, 'renameLicence']);
         Route::get('export', [SelfService::class, 'export'])->middleware('throttle:5,1');
         Route::get('tickets', [Account::class, 'tickets']);
+        Route::get('tickets/new', [Account::class, 'newTicket']);
         Route::post('tickets', [Account::class, 'storeTicket']);
         Route::get('tickets/{ticket}', [Account::class, 'ticket']);
         Route::post('tickets/{ticket}/reply', [Account::class, 'replyTicket']);
+        Route::post('tickets/{ticket}/solve', [Account::class, 'solveTicket']);
         Route::get('profile', [Account::class, 'profile']);
+        Route::post('password', [Account::class, 'updatePassword']);
+        Route::post('profile/delete', [Account::class, 'deleteAccount']);
         Route::post('profile', [Account::class, 'updateProfile']);
     });
 });

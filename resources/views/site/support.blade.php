@@ -23,7 +23,7 @@
 	<div class="s-wrap s-narrow">
 		<h2 class="s-d-m">Before you write</h2>
 		<p class="s-muted">Include your site address, WordPress and PHP versions and the debug text from ElevenRank, then Status. It contains no addresses, keys or emails.</p>
-		<form class="s-form" method="get" action="/account/tickets">
+		<form class="s-form" method="get" action="/account/tickets/new">
 			<label for="s-subject">Subject</label>
 			<input id="s-subject" name="subject" type="text" maxlength="160" placeholder="What is the problem?">
 			<label for="s-body">Message</label>

@@ -35,7 +35,7 @@
 				<tbody>
 				@php $older = array_values(array_filter($history, fn ($v) => $release && $v !== $release['version'])); @endphp
 				@forelse ($older as $v)
-					<tr><td>{{ $v }}</td><td class="a-muted">—</td><td class="a-muted">—</td><td style="text-align:right"><a href="/account/tickets?subject={{ urlencode('Pro '.$v.' download') }}">Ask support</a></td></tr>
+					<tr><td>{{ $v }}</td><td class="a-muted">—</td><td class="a-muted">—</td><td style="text-align:right"><a href="/account/tickets/new?subject={{ urlencode('Pro '.$v.' download') }}">Ask support</a></td></tr>
 				@empty
 					<tr><td colspan="4" class="a-muted" style="text-align:center">No earlier versions yet.@if ($release) {{ $release['version'] }} is the first release.@endif</td></tr>
 				@endforelse

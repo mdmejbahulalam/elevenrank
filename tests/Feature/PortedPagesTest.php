@@ -31,7 +31,7 @@ class PortedPagesTest extends TestCase
         $order = Order::firstOrFail();
         $this->post('/account/tickets', ['subject' => 'Help me', 'body' => 'Please']);
         $this->get('/account/orders')->assertOk()->assertSee($order->number)->assertSee('Pending');
-        $this->get("/account/orders/{$order->number}")->assertOk()->assertSee('Payment is being finalised');
+        $this->get("/account/orders/{$order->number}")->assertOk()->assertSee('Waiting for your payment');
         $this->get('/account/tickets')->assertOk()->assertSee('Help me');
         $this->get('/account/tickets/1')->assertOk()->assertSee('Reply');
 
