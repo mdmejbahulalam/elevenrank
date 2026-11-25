@@ -1,0 +1,42 @@
+/* ElevenRank design tokens. One source for the site, account and admin skins.
+   Values match the ElevenRank design system canvas. */
+:root {
+  /* colour */
+  --ground: #f5f6f8; --surface: #ffffff; --sunken: #eef0f4;
+  --ink: #101828; --muted: #475467; --line: #e4e7ec; --field-border: #667085;
+  --accent: #4338ca; --accent-dark: #312e81; --accent-soft: #eef0ff; --on-accent: #ffffff; --focus: #4338ca;
+  --ok: #067647; --ok-soft: #e7f6ee; --warn: #93370d; --warn-soft: #fef0c7;
+  --bad: #b42318; --bad-soft: #fde9e7; --info: #175cd3; --info-soft: #e8f1fe;
+  /* type: system fonts only. Scale 12 14 16 18 20 24 32 44 60 */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --t-12: .75rem; --t-14: .875rem; --t-16: 1rem; --t-18: 1.125rem; --t-20: 1.25rem;
+  --t-24: 1.5rem; --t-32: 2rem; --t-44: 2.75rem; --t-60: 3.75rem;
+  /* space, base 4px */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
+  /* radius, shadow, motion */
+  --r-sm: 8px; --r-md: 12px; --r-lg: 20px;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .06);
+  --shadow-float: 0 8px 24px rgba(16, 24, 40, .12), 0 2px 6px rgba(16, 24, 40, .08);
+  --ease: 160ms ease;
+  /* legacy names still used by older templates */
+  --bg: var(--ground); --card: var(--surface); --soft: var(--accent-soft); --accent-ink: var(--on-accent);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0f1020; --surface: #181a30; --sunken: #121328;
+    --ink: #eceefb; --muted: #a9abc6; --line: #2a2d4a; --field-border: #7d80a6;
+    --accent: #8b83ff; --accent-dark: #a5a0ff; --accent-soft: #23254a; --on-accent: #0f1020; --focus: #c4c0ff;
+    --ok: #6ce9a6; --ok-soft: #0f2e22; --warn: #fdb022; --warn-soft: #3a2a05;
+    --bad: #ff8a80; --bad-soft: #3b1513; --info: #84caff; --info-soft: #10264a;
+    --shadow-float: 0 8px 24px rgba(0, 0, 0, .5), 0 2px 6px rgba(0, 0, 0, .4);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0f1020; --surface: #181a30; --sunken: #121328;
+  --ink: #eceefb; --muted: #a9abc6; --line: #2a2d4a; --field-border: #7d80a6;
+  --accent: #8b83ff; --accent-dark: #a5a0ff; --accent-soft: #23254a; --on-accent: #0f1020; --focus: #c4c0ff;
+  --ok: #6ce9a6; --ok-soft: #0f2e22; --warn: #fdb022; --warn-soft: #3a2a05;
+  --bad: #ff8a80; --bad-soft: #3b1513; --info: #84caff; --info-soft: #10264a;
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, .5), 0 2px 6px rgba(0, 0, 0, .4);
+}

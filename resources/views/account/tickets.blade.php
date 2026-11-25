@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Support')
 @section('body')
 <h1>Support</h1>

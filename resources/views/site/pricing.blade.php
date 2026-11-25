@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Pricing')
 @section('description', 'ElevenRank Pro annual licences for 1, 3 or 10 sites. The free plugin stays free.')
 @section('content')

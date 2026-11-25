@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Orders')
 @section('body')
 <h1>Orders</h1>

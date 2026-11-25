@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Developer hooks')
 @section('description', 'Public actions and filters in ElevenRank for building add-ons and customising output.')
 @section('content')

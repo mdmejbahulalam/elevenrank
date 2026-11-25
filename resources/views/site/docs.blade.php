@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Documentation')
 @section('description', 'Install ElevenRank, import from another SEO plugin, find your sitemap, set up redirects and structured data. Answers to common questions.')
 @section('content')

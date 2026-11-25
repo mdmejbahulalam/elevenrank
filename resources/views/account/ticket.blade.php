@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Ticket')
 @section('body')
 <h1>{{ $ticket->subject }} <span class="tag">{{ $ticket->status }}</span></h1>

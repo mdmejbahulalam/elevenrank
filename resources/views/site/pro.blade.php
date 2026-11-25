@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'ElevenRank Pro')
 @section('description', 'ElevenRank Pro adds a site audit, auto-fix queue, rank tracker, Search Console figures, an AI writer that uses your own account, and more to the free plugin.')
 @section('content')

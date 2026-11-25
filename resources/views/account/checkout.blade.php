@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Checkout')
 @section('body')
 <h1>Confirm your order</h1>

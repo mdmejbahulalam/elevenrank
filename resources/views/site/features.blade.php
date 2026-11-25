@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Features')
 @section('description', 'Everything in the free ElevenRank SEO plugin: titles, sitemaps, schema, redirects, a 404 monitor, breadcrumbs, importers and a live editor score.')
 @section('content')

@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Order')
 @section('body')
 <h1>Order {{ $order->number }}</h1>

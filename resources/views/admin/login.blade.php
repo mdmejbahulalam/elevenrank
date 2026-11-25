@@ -1,16 +1,14 @@
-@extends('admin.layout')
+@extends('layouts.auth')
+@section('suffix', 'HQ')
 @section('title', 'Sign in')
 @section('content')
-<div class="card" style="max-width:420px;margin-inline:auto">
-	<h1>Staff sign in</h1>
+<x-card>
+	<h1 style="margin-top:0">Staff sign in</h1>
 	<form method="post" action="/admin/login">
 		@csrf
-		<label for="email">Email</label>
-		<input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="username" required autofocus>
-		<label for="password">Password</label>
-		<input id="password" type="password" name="password" autocomplete="current-password" required>
-		@error('email') <p class="err" role="alert">{{ $message }}</p> @enderror
-		<div class="row"><button>Sign in</button></div>
+		<x-field name="email" label="Email" type="email" autocomplete="username" required />
+		<x-field name="password" label="Password" type="password" autocomplete="current-password" required />
+		<p style="margin-top:20px"><x-button class="block">Sign in</x-button></p>
 	</form>
-</div>
+</x-card>
 @endsection

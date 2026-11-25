@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('layouts.admin')
 @section('title', $ticket->subject)
 @section('content')
 <h1>{{ $ticket->subject }}</h1>

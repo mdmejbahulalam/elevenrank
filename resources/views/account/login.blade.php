@@ -1,19 +1,14 @@
-@extends('site.layout')
+@extends('layouts.auth')
 @section('title', 'Sign in')
 @section('content')
-<div class="wrap page" style="max-width:440px">
-	<h1>Sign in</h1>
-	<div class="card">
-		<form method="post" action="/account/login">
-			@csrf
-			<label for="email">Email</label>
-			<input id="email" type="email" name="email" value="{{ old('email') }}" autocomplete="username" required autofocus>
-			<label for="password">Password</label>
-			<input id="password" type="password" name="password" autocomplete="current-password" required>
-			@error('email') <p class="err" role="alert">{{ $message }}</p> @enderror
-			<p><button class="btn">Sign in</button></p>
-		</form>
-	</div>
-	<p>New here? <a href="/account/register">Create an account</a>.</p>
-</div>
+<x-card>
+	<h1 style="margin-top:0">Sign in</h1>
+	<form method="post" action="/account/login">
+		@csrf
+		<x-field name="email" label="Email" type="email" autocomplete="username" required />
+		<x-field name="password" label="Password" type="password" autocomplete="current-password" required />
+		<p style="margin-top:20px"><x-button class="block">Sign in</x-button></p>
+	</form>
+</x-card>
+<p>New here? <a href="/account/register">Create an account</a>.</p>
 @endsection

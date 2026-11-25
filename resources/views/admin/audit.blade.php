@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('layouts.admin')
 @section('title', 'Audit log')
 @section('content')
 <h1>Audit log</h1>

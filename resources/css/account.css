@@ -1,0 +1,22 @@
+/* Customer skin: calm. Sidebar becomes bottom tabs on phones. */
+.acc-top { background: var(--surface); border-bottom: 1px solid var(--line); }
+.acc-top .in { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.acc-shell { display: flex; max-width: 1200px; margin: 0 auto; gap: 32px; padding: 32px 24px 96px; align-items: flex-start; }
+.acc-main { flex: 1; min-width: 0; }
+.acc-side { flex: 0 0 220px; display: flex; flex-direction: column; gap: 2px; }
+.acc-side a, .acc-side button.link { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border-radius: var(--r-sm); color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-14); width: 100%; }
+.acc-side a:hover { background: var(--accent-soft); }
+.acc-side a[aria-current] { background: var(--accent-soft); color: var(--accent-dark); font-weight: 600; }
+.acc-side form { margin: 0; }
+.acc-side button.link { color: var(--muted); text-decoration: none; text-align: left; }
+.acc-main h1 { font-size: var(--t-24); margin: 0 0 4px; }
+.acc-main h2 { font-size: var(--t-20); }
+.auth-box { min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; }
+.auth-box .box { width: 100%; max-width: 420px; }
+.auth-box .brand { display: flex; justify-content: center; margin-bottom: 24px; }
+@media (max-width: 820px) {
+  .acc-shell { flex-direction: column; gap: 16px; padding: 16px 16px 96px; }
+  .acc-side { flex: none; width: 100%; flex-direction: row; position: fixed; left: 0; right: 0; bottom: 0; background: var(--surface); border-top: 1px solid var(--line); padding: 6px; justify-content: space-around; z-index: 6; }
+  .acc-side a, .acc-side button.link { flex-direction: column; gap: 2px; min-height: 52px; padding: 4px 6px; font-size: var(--t-12); justify-content: center; width: auto; }
+  .acc-side .desk { display: none; }
+}

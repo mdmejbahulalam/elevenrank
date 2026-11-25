@@ -1,4 +1,4 @@
-@extends('admin.layout')
+@extends('layouts.admin')
 @section('title', 'Pro releases')
 @section('content')
 <h1>Pro releases</h1>

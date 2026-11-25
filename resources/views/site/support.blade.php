@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Support')
 @section('description', 'Get help with ElevenRank: documentation, community support for the free plugin, and tickets for Pro customers.')
 @section('content')

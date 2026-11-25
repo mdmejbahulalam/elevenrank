@@ -1,0 +1,25 @@
+/* Marketing skin: airy */
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+.narrow { max-width: 720px; }
+.site-head { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+.site-head .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+nav.main { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+nav.main a:not(.btn) { color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--t-14); padding: 10px 10px; border-radius: var(--r-sm); }
+nav.main a:not(.btn):hover, nav.main a[aria-current] { color: var(--accent); background: var(--accent-soft); }
+.hero { padding: 72px 0 56px; text-align: center; }
+.hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); margin: 0 0 16px; letter-spacing: -.02em; }
+.hero p.lead { font-size: var(--t-20); color: var(--muted); max-width: 640px; margin: 0 auto 28px; }
+.hero .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+section.block { padding: 48px 0; }
+section.block h2 { font-size: var(--t-32); margin: 0 0 8px; letter-spacing: -.01em; }
+section.block .sub { color: var(--muted); margin: 0 0 28px; }
+.price { font-size: 2.2rem; font-weight: 800; letter-spacing: -.02em; } .price small { font-size: var(--t-14); font-weight: 500; color: var(--muted); }
+ul.ticks { list-style: none; padding: 0; margin: 14px 0 20px; } ul.ticks li { padding-left: 26px; position: relative; margin: 6px 0; }
+ul.ticks li::before { content: "✓"; position: absolute; left: 0; color: var(--ok); font-weight: 700; }
+.page { padding: 48px 0 64px; } .page h1 { font-size: 2.1rem; margin: 0 0 8px; } .page h2 { margin-top: 32px; } .page .sub { color: var(--muted); }
+.page table th, .page table td { padding: 8px 8px; }
+.site-foot { border-top: 1px solid var(--line); background: var(--surface); padding: 32px 0; margin-top: 32px; font-size: var(--t-14); }
+.site-foot .cols { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.site-foot h4 { margin: 0 0 8px; font-size: var(--t-12); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.site-foot a { display: block; color: var(--ink); text-decoration: none; padding: 6px 0; } .site-foot a:hover { color: var(--accent); }
+@media (max-width: 640px) { .hero { padding: 48px 0 32px; } }

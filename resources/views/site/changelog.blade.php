@@ -1,4 +1,4 @@
-@extends('site.layout')
+@extends('layouts.site')
 @section('title', 'Changelog')
 @section('description', 'Release notes for ElevenRank and ElevenRank Pro.')
 @section('content')

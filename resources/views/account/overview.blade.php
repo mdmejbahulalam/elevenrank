@@ -1,20 +1,27 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'My account')
 @section('body')
 <h1>Hello, {{ auth()->user()->name }}</h1>
+<p class="muted" style="margin:0 0 24px">Your ElevenRank Pro licence, downloads and support in one place.</p>
 <div class="grid" style="margin:16px 0">
-	<div class="card"><h3>Licences</h3><p>{{ $licences->count() }} on this account</p></div>
-	<div class="card"><h3>Open tickets</h3><p>{{ $tickets }}</p></div>
+	<x-stat label="Licences on this account" :value="$licences->count()" />
+	<x-stat label="Open tickets" :value="$tickets" />
 </div>
 @if ($licences->isEmpty())
-	<div class="card"><h3>No licence yet</h3><p>Pro unlocks the audit, rank tracker and more. <a href="/pricing">See pricing</a>.</p></div>
+	<x-card><x-empty icon="key" title="No licence yet">Pro unlocks the audit, rank tracker and more. <a href="/pricing">See pricing</a>.</x-empty></x-card>
 @else
 	<h2>Your licences</h2>
 	@foreach ($licences as $l)
-		<div class="card" style="margin-bottom:12px">
-			<code>{{ $l->license_key }}</code>
-			<p>{{ $l->activations_count }} / {{ $l->site_limit ?: 'unlimited' }} sites · {{ $l->status === 'active' ? ($l->isExpired() ? 'term ended '.$l->expires->format('j M Y') : ($l->expires ? 'renews or ends '.$l->expires->format('j M Y') : 'no expiry')) : $l->status }}</p>
-		</div>
+		<x-card style="margin-bottom:12px">
+			<x-copy-field :value="$l->license_key" label="Copy key" />
+			<p style="margin-top:12px">
+				{{ $l->activations_count }} / {{ $l->site_limit ?: 'unlimited' }} sites ·
+				@if ($l->status !== 'active') <x-badge tone="bad">{{ $l->status }}</x-badge>
+				@elseif ($l->isExpired()) <x-badge tone="info">term ended {{ $l->expires->format('j M Y') }}</x-badge>
+				@elseif ($l->expires) <x-badge tone="ok">renews or ends {{ $l->expires->format('j M Y') }}</x-badge>
+				@else <x-badge tone="ok">no expiry</x-badge> @endif
+			</p>
+		</x-card>
 	@endforeach
 @endif
 @if ($orders->isNotEmpty())

@@ -1,4 +1,4 @@
-@extends('account.layout')
+@extends('layouts.account')
 @section('page', 'Profile')
 @section('body')
 <h1>Profile</h1>

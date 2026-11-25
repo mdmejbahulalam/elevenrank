@@ -24,3 +24,23 @@
 7. Seller legal name, address and tax details.
 
 **Next**: Phase 1, design system. Risk: porting about 970 lines of Blade with inline CSS to shared tokens and components without changing behaviour; the 26 feature tests plus a before and after screenshot grid are the guard.
+
+## Phase 1: Design system (2026-11-25)
+
+**Built** (branch `phase-1-design-system`)
+- `resources/css/{tokens,base,components,site,account,admin}.css`. Tokens match the design system canvas (colour, 12-60 type scale, 4px space, radius 8/12/20, light and dark by `prefers-color-scheme` plus a `data-theme` override). Old class names (`btn`, `card`, `tag`, `flash`, `grid`, `row`, `--bg`, `--card`, `--soft`) are kept so un-ported pages still work.
+- `php artisan assets:build` (`app/Console/Commands/BuildAssets.php`) writes `public/assets/{site,account,admin}.css`. **Deviation:** no Vite/Node, because the repo has no `node_modules`, the host has no Node, and the CSS is plain. Output is committed.
+- `public/assets/app.js` (copy buttons, modal open/close, theme toggle hook; pages work without it), `theme.js` (applies a saved theme before paint), `mark.svg`.
+- Blade components in `resources/views/components`: logo, icon (18 icons, inline SVG), badge, alert, button, card, stat, field, empty, copy-field, breadcrumb, modal, code-block.
+- Layouts `resources/views/layouts/{site,account,admin,auth}.blade.php` (+ `head`). Old `site/account/admin.layout` removed; every page now extends the new ones. No inline `<style>` blocks remain in any layout. Skip link, `<main id="main">`, landmarks added. Account has a sidebar that becomes bottom tabs on phones; admin has a grouped sidebar.
+- Ported to components: account login, register, overview, licences; admin login, overview. Other pages keep their markup and use the compatible classes.
+- Emails: `resources/views/emails/{layout,welcome,receipt,renewal30,renewal7,expired,refund,ticket_reply}.blade.php`, inline-styled, with `EmailTemplatesTest`. **Not wired to mailables or any sending code** (that would change behaviour).
+
+**Evidence**
+- `php artisan test`: 27 passed, 205 assertions (26 baseline + 1 new).
+- Rendered-text diff against the Phase 0 HTML of 15 public pages: marketing pages differ only by the new "Skip to content" link; login and register differ because they no longer carry the site header and footer (they use the auth layout).
+- CSS size: site 10.5 KB, account 10.0 KB, admin 10.0 KB (about 3 KB gzip each), under the 40 KB budget.
+- Spot-checked pricing and account login in the in-app browser.
+- **Not run:** axe, Lighthouse, screenshot grid of all pages in light and dark, dark-mode contrast check, signed-in pages in a browser.
+
+**Not done (carry into Phase 2 to 4):** icon sprite file (icons are inline per use), sortable and paginated table component, tabs, toggle, select and checkbox components, markdown mailables and sending, apple-touch icon and OG image template, porting the remaining account and admin pages to components.
