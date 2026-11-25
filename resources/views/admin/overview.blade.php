@@ -11,6 +11,7 @@
 	<div class="card"><div class="stat">{{ $openTickets }}</div><div class="muted small"><a href="/admin/tickets">Open tickets</a></div></div>
 	<x-stat label="Expiring in 30 days" :value="$expiring" />
 </div>
+@can('staff.plans')
 <x-card title="Before you launch">
 	<ul>
 		<li>Set the real prices in <a href="/admin/plans">Plans</a>. The ones there now are placeholders.</li>
@@ -19,4 +20,5 @@
 		<li>Have the legal pages (terms, privacy, refunds) reviewed.</li>
 	</ul>
 </x-card>
+@endcan
 @endsection

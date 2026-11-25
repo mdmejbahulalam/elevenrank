@@ -8,12 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditLog extends Model
 {
-    protected $fillable = ['user_id', 'action', 'subject'];
+    protected $fillable = ['user_id', 'action', 'subject', 'ip', 'reason'];
 
     public function user(): BelongsTo { return $this->belongsTo(User::class); }
 
-    public static function record(string $action, string $subject = ''): void
+    public static function record(string $action, string $subject = '', ?string $reason = null): void
     {
-        self::create(['user_id' => Auth::id(), 'action' => $action, 'subject' => $subject]);
+        self::create([
+            'user_id' => Auth::id(),
+            'action' => $action,
+            'subject' => $subject,
+            'ip' => (app()->runningInConsole() && ! app()->runningUnitTests()) ? null : request()->ip(),
+            'reason' => $reason,
+        ]);
     }
 }

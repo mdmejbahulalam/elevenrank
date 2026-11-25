@@ -43,7 +43,7 @@ class Fulfilment
         });
     }
 
-    public function refund(Order $order): Order
+    public function refund(Order $order, ?string $reason = null): Order
     {
         if ($order->status === 'refunded') {
             return $order;
@@ -51,7 +51,7 @@ class Fulfilment
 
         $order->licence?->update(['status' => 'revoked']);
         $order->update(['status' => 'refunded', 'refunded_at' => now()]);
-        AuditLog::record('order.refunded', $order->number);
+        AuditLog::record('order.refunded', $order->number, $reason);
         app(Notifier::class)->refund($order);
 
         return $order;

@@ -81,26 +81,40 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
-        Route::get('/', [StaffController::class, 'overview']);
-        Route::get('customers', [StaffController::class, 'customers']);
-        Route::get('customers/{user}', [StaffController::class, 'customer']);
-        Route::get('orders', [StaffController::class, 'orders']);
-        Route::post('orders/{order}', [StaffController::class, 'orderAction']);
-        Route::get('plans', [StaffController::class, 'plans']);
-        Route::post('plans/{plan}', [StaffController::class, 'updatePlan']);
-        Route::get('tickets', [StaffController::class, 'tickets']);
-        Route::get('tickets/{ticket}', [StaffController::class, 'ticket']);
-        Route::post('tickets/{ticket}/reply', [StaffController::class, 'replyTicket']);
-        Route::get('audit', [StaffController::class, 'audit']);
-        Route::get('system', [StaffController::class, 'system']);
-        Route::post('system', [StaffController::class, 'runSystem']);
+        Route::get('/', [StaffController::class, 'overview'])->middleware('can:staff.overview');
+        Route::get('search', [StaffController::class, 'search'])->middleware('can:staff.search');
+        Route::middleware('can:staff.customers')->group(function () {
+            Route::get('customers', [StaffController::class, 'customers']);
+            Route::get('customers/{user}', [StaffController::class, 'customer']);
+        });
+        Route::get('orders', [StaffController::class, 'orders'])->middleware('can:staff.orders.view');
+        Route::get('orders.csv', [StaffController::class, 'ordersCsv'])->middleware('can:staff.orders.view');
+        Route::post('orders/{order}', [StaffController::class, 'orderAction']); // each action is authorised inside
+        Route::middleware('can:staff.plans')->group(function () {
+            Route::get('plans', [StaffController::class, 'plans']);
+            Route::post('plans/{plan}', [StaffController::class, 'updatePlan']);
+        });
+        Route::middleware('can:staff.tickets')->group(function () {
+            Route::get('tickets', [StaffController::class, 'tickets']);
+            Route::get('tickets/{ticket}', [StaffController::class, 'ticket']);
+            Route::post('tickets/{ticket}/reply', [StaffController::class, 'replyTicket']);
+        });
+        Route::get('audit', [StaffController::class, 'audit'])->middleware('can:staff.audit');
+        Route::middleware('can:staff.system')->group(function () {
+            Route::get('system', [StaffController::class, 'system']);
+            Route::post('system', [StaffController::class, 'runSystem']);
+        });
 
-        Route::get('licences', [LicenceController::class, 'index']);
-        Route::post('licences', [LicenceController::class, 'store']);
-        Route::post('licences/{licence}', [LicenceController::class, 'update']);
-        Route::post('licences/{licence}/status', [LicenceController::class, 'setStatus']);
-        Route::get('releases', [ReleaseController::class, 'index']);
-        Route::post('releases', [ReleaseController::class, 'store']);
-        Route::post('releases/restore', [ReleaseController::class, 'restore']);
+        Route::middleware('can:staff.licences')->group(function () {
+            Route::get('licences', [LicenceController::class, 'index']);
+            Route::post('licences', [LicenceController::class, 'store']);
+            Route::post('licences/{licence}', [LicenceController::class, 'update']);
+            Route::post('licences/{licence}/status', [LicenceController::class, 'setStatus']);
+        });
+        Route::middleware('can:staff.releases')->group(function () {
+            Route::get('releases', [ReleaseController::class, 'index']);
+            Route::post('releases', [ReleaseController::class, 'store']);
+            Route::post('releases/restore', [ReleaseController::class, 'restore']);
+        });
     });
 });

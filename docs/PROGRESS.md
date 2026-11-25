@@ -83,3 +83,16 @@
 - `php artisan emails:term-notices` sends the 30-day, 7-day and term-ended emails once per licence (migration `add_notice_columns_to_licences`), scheduled daily at 08:00. **Hosting needs one cron entry:** `* * * * * php /path/to/artisan schedule:run`.
 - Tests: `ServiceEmailsTest`. Total 39 passed, 325 assertions.
 - Still needed: set `MAIL_*` for a real sender (default is `log`), real seller name and support address in the email footer (placeholders), password-reset mail still uses Laravel's default text, no email verification yet.
+
+## Phase 4: Staff area (2026-11-25, partial slice)
+
+**Built**
+- Roles `super_admin`, `support`, `finance` (migration adds `users.role`, existing staff become `super_admin`; a staff row with no role counts as `super_admin`, an unknown role gets no access). Abilities are Gates in `AppServiceProvider::ABILITIES`, enforced with `can:` on every staff route; order actions are checked per action (support cannot mark paid or refund; finance cannot see licences, customers or releases; plans, releases, system and audit are super_admin only). Sidebar hides what the role cannot open. `php artisan admin:create <email> --role=support|finance|super_admin`.
+- Refund needs a reason (min 3 characters). The audit log now stores IP and reason and shows both.
+- Global search (`/admin/search`, box in the sidebar) over customers, licence keys, sites, orders and tickets, limited to what the role may see.
+- Orders CSV export (`/admin/orders.csv`, audited, formula-safe cells).
+- Tests: `StaffRolesTest` (7). Total 46 passed, 375 assertions.
+
+**Not done (still Phase 4)**
+- Two-factor for staff (spec says required), revoke and reinstate with a reason and confirm modal, reissue key, customer notes and timeline, impersonation, internal notes on tickets, canned replies, assignee, plan feature bullets and preview, release validation report and notes, download counts, Content editor, telemetry, settings and staff management screens, audit filter and export, health checks beyond the current system page, sortable and paginated tables, Ctrl+K shortcut, Playwright journey per role.
+- Not run: browser check, axe.

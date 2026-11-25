@@ -56,7 +56,7 @@ class PlatformTest extends TestCase
         $this->actingAs($user)->get('/account/licences')->assertSee($licence->license_key);
         $this->postJson('/wp-json/elevenrank-licence/v1/activate', ['key' => $licence->license_key, 'site' => 'a.test'])->assertJson(['status' => 'valid']);
 
-        $this->actingAs($staff)->post("/admin/orders/{$order->id}", ['do' => 'refund']);
+        $this->actingAs($staff)->post("/admin/orders/{$order->id}", ['do' => 'refund', 'reason' => 'Customer asked']);
         $this->assertSame('revoked', $licence->fresh()->status);
         $this->postJson('/wp-json/elevenrank-licence/v1/check', ['key' => $licence->license_key, 'site' => 'a.test'])->assertJson(['status' => 'revoked']);
     }

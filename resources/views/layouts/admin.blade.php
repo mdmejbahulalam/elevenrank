@@ -14,7 +14,9 @@
 @auth
 <div class="hq-shell">
 	<nav class="hq-side" aria-label="Staff">
-		@foreach ([[null, '/admin', 'Overview', 'admin'], ['Sales', '/admin/customers', 'Customers', 'admin/customers*'], [null, '/admin/orders', 'Orders', 'admin/orders*'], [null, '/admin/licences', 'Licences', 'admin/licences*'], ['Product', '/admin/releases', 'Releases', 'admin/releases*'], [null, '/admin/plans', 'Plans', 'admin/plans*'], ['Support', '/admin/tickets', 'Tickets', 'admin/tickets*'], ['System', '/admin/audit', 'Audit log', 'admin/audit'], [null, '/admin/system', 'System', 'admin/system']] as [$grp, $href, $label, $pat])
+		<form method="get" action="/admin/search" role="search" style="margin:0 0 12px"><input type="search" name="q" placeholder="Search" aria-label="Search customers, keys, orders"></form>
+		@foreach ([[null, '/admin', 'Overview', 'admin', 'staff.overview'], ['Sales', '/admin/customers', 'Customers', 'admin/customers*', 'staff.customers'], [null, '/admin/orders', 'Orders', 'admin/orders*', 'staff.orders.view'], [null, '/admin/licences', 'Licences', 'admin/licences*', 'staff.licences'], ['Product', '/admin/releases', 'Releases', 'admin/releases*', 'staff.releases'], [null, '/admin/plans', 'Plans', 'admin/plans*', 'staff.plans'], ['Support', '/admin/tickets', 'Tickets', 'admin/tickets*', 'staff.tickets'], ['System', '/admin/audit', 'Audit log', 'admin/audit', 'staff.audit'], [null, '/admin/system', 'System', 'admin/system', 'staff.system']] as [$grp, $href, $label, $pat, $can])
+			@continue(! \Illuminate\Support\Facades\Gate::allows($can))
 			@if ($grp)<p class="grp">{{ $grp }}</p>@endif
 			<a href="{{ $href }}" @if(request()->is($pat)) aria-current="page" @endif>{{ $label }}</a>
 		@endforeach

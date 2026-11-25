@@ -35,7 +35,7 @@ class ServiceEmailsTest extends TestCase
         $this->post("/admin/orders/{$order->id}", ['do' => 'paid']); // idempotent: no second receipt
         Mail::assertSentCount(2); // welcome and one receipt
 
-        $this->post("/admin/orders/{$order->id}", ['do' => 'refund']);
+        $this->post("/admin/orders/{$order->id}", ['do' => 'refund', 'reason' => 'Customer asked']);
         Mail::assertSent(TemplateMail::class, fn ($m) => $m->template === 'refund' && $m->hasTo('ann@example.com'));
 
         $ticket = Ticket::create(['user_id' => $user->id, 'subject' => 'Help']);

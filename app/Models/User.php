@@ -39,6 +39,18 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
+    public const ROLES = ['super_admin', 'support', 'finance'];
+
+    /** Staff role, or null for customers. Staff created before roles existed count as super_admin. */
+    public function staffRole(): ?string
+    {
+        if (! $this->is_admin) {
+            return null;
+        }
+
+        return $this->role === null ? 'super_admin' : (in_array($this->role, self::ROLES, true) ? $this->role : 'none');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -14,6 +14,8 @@ use App\Services\Fulfilment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\View\View;
 
 /** Overview, customers, orders, plans, tickets, audit log and system tools for staff. */
@@ -59,13 +61,60 @@ class StaffController extends Controller
 
     public function orderAction(Request $request, Order $order, Fulfilment $fulfilment): RedirectResponse
     {
-        match ($request->validate(['do' => ['required', 'in:paid,refund,cancel']])['do']) {
-            'paid' => $fulfilment->markPaid($order, (string) $request->input('reference')),
-            'refund' => $fulfilment->refund($order),
-            'cancel' => $fulfilment->cancel($order),
-        };
+        $do = $request->validate(['do' => ['required', 'in:paid,refund,cancel']])['do'];
+        Gate::authorize($do === 'refund' ? 'staff.orders.refund' : 'staff.orders.settle');
+
+        if ($do === 'refund') {
+            $reason = $request->validate(['reason' => ['required', 'string', 'min:3', 'max:255']])['reason'];
+            $fulfilment->refund($order, $reason);
+        } elseif ($do === 'paid') {
+            $fulfilment->markPaid($order, (string) $request->input('reference'));
+        } else {
+            $fulfilment->cancel($order);
+        }
 
         return back()->with('status', 'Order '.$order->number.' updated.');
+    }
+
+    /** One box that finds customers, licence keys, sites, orders and tickets. */
+    public function search(Request $request): View
+    {
+        $q = trim((string) $request->query('q'));
+        $r = ['customers' => collect(), 'licences' => collect(), 'orders' => collect(), 'tickets' => collect()];
+
+        if (strlen($q) >= 2) {
+            $like = '%'.str_replace(['%', '_'], ['\\%', '\\_'], $q).'%';
+            if (Gate::allows('staff.customers')) {
+                $r['customers'] = User::where('is_admin', false)->where(fn ($w) => $w->where('email', 'like', $like)->orWhere('name', 'like', $like))->limit(20)->get();
+            }
+            if (Gate::allows('staff.licences')) {
+                $r['licences'] = Licence::where('license_key', 'like', $like)->orWhere('email', 'like', $like)->orWhereHas('activations', fn ($a) => $a->where('site', 'like', $like))->limit(20)->get();
+            }
+            if (Gate::allows('staff.orders.view')) {
+                $r['orders'] = Order::with('user')->where('number', 'like', $like)->limit(20)->get();
+            }
+            if (Gate::allows('staff.tickets')) {
+                $r['tickets'] = Ticket::with('user')->where('subject', 'like', $like)->limit(20)->get();
+            }
+        }
+
+        return view('admin.search', ['q' => $q] + $r);
+    }
+
+    public function ordersCsv(): StreamedResponse
+    {
+        AuditLog::record('orders.exported');
+
+        return response()->streamDownload(function () {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['number', 'customer', 'plan', 'amount', 'status', 'placed']);
+            foreach (Order::with(['user', 'plan'])->latest('id')->cursor() as $o) {
+                // Prefix cells that a spreadsheet could read as a formula.
+                $safe = fn (string $v) => preg_match('/^[=+\-@]/', $v) ? "'".$v : $v;
+                fputcsv($out, [$o->number, $safe($o->user->email), $o->plan->name, $o->amount(), $o->status, $o->created_at->format('Y-m-d')]);
+            }
+            fclose($out);
+        }, 'orders.csv', ['Content-Type' => 'text/csv']);
     }
 
     public function plans(): View
