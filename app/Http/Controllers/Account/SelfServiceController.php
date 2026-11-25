@@ -17,7 +17,7 @@ class SelfServiceController extends Controller
     {
         abort_unless($order->user_id === $request->user()->id && $order->status !== 'pending', 404);
 
-        return view('account.invoice', ['order' => $order->load(['plan', 'user'])]);
+        return view('account.order', ['order' => $order->load(['plan', 'user', 'licence'])]);
     }
 
     /** Provider-neutral: records the request as a ticket for staff to act on. Only paid orders inside 14 days. */

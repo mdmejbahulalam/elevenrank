@@ -65,7 +65,7 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 		<section class="a-card">
 			<h2 class="a-h3">Last order</h2>
 			@if ($orders->isNotEmpty())@php $o = $orders->first(); @endphp
-				<p class="a-small a-muted" style="margin:4px 0 12px">{{ $o->number }} · {{ $o->plan->name }} · {{ $o->amount() }} · {{ $o->status }}</p><a class="a-btn ghost sm" href="/account/orders/{{ $o->number }}" style="padding-left:0">View invoice</a>
+				<p class="a-small a-muted" style="margin:4px 0 12px">{{ $o->number }} · {{ $o->plan->name }}{{ $o->plan->sites ? ", ".$o->plan->sites." sites" : "" }} · {{ $o->status }}</p><a class="a-btn ghost sm" href="/account/orders/{{ $o->number }}" style="padding-left:0">View invoice</a>
 			@else<p class="a-small a-muted" style="margin:4px 0 0">No orders yet.</p>@endif
 		</section>
 	</div>
