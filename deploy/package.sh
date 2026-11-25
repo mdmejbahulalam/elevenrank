@@ -14,6 +14,8 @@ tar -C "$root" \
 	-cf - . | tar -C "$stage" -xf -
 
 (cd "$stage" && composer install --no-dev --optimize-autoloader --no-interaction --no-scripts)
+# Cached provider lists from a dev machine name dev-only packages that are not installed in production.
+rm -f "$stage"/bootstrap/cache/*.php
 mkdir -p "$stage/storage/framework/"{cache,sessions,views} "$stage/storage/logs" "$stage/bootstrap/cache"
 
 rm -f "$out/elevenrank-platform.zip"
