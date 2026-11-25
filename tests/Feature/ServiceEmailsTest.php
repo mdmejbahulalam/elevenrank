@@ -33,7 +33,7 @@ class ServiceEmailsTest extends TestCase
         Mail::assertSent(TemplateMail::class, fn ($m) => $m->template === 'receipt' && $m->hasTo('ann@example.com') && $m->vars['key'] === $key);
 
         $this->post("/admin/orders/{$order->id}", ['do' => 'paid']); // idempotent: no second receipt
-        Mail::assertSentCount(2); // welcome and one receipt
+        Mail::assertSentCount(3); // welcome, one receipt and one licence key email
 
         $this->post("/admin/orders/{$order->id}", ['do' => 'refund', 'reason' => 'Customer asked']);
         Mail::assertSent(TemplateMail::class, fn ($m) => $m->template === 'refund' && $m->hasTo('ann@example.com'));

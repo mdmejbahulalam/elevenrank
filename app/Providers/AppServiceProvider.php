@@ -36,5 +36,12 @@ class AppServiceProvider extends ServiceProvider
         foreach (self::ABILITIES as $ability => $roles) {
             Gate::define($ability, fn (User $user) => $user->is_admin && in_array($user->staffRole(), ['super_admin', ...$roles], true));
         }
+
+        // The password reset email uses the same branded template as every other service email.
+        \Illuminate\Auth\Notifications\ResetPassword::toMailUsing(function ($user, string $token) {
+            $url = url('/account/reset-password/'.$token.'?email='.urlencode($user->getEmailForPasswordReset()));
+
+            return (new \App\Mail\TemplateMail('reset', 'Reset your ElevenRank password', ['url' => $url, 'minutes' => config('auth.passwords.users.expire', 60)]))->to($user->email);
+        });
     }
 }

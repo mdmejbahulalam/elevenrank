@@ -171,3 +171,13 @@ Payment provider is now **Paddle** (Lemon Squeezy is shutting down on 31 Mar 202
 - Sign in: the code field is optional; leaving it empty still goes to the separate code page.
 - Overview: greeting and chart match; the sample-data label is not shown.
 - Not compared visually: Order, Orders, Customers, Licences lists after the last tweak, Webhooks, Settings, New release, Audit, No access.
+
+## Email and brand assets
+
+- All service emails follow the Email canvases: one layout, shared partials (button, note, small), plus a generated plain-text part.
+- New templates: licence (sent after the receipt), reset (password reset), verify (confirm email).
+- The verify email is not wired to a flow yet (users do not implement MustVerifyEmail); `Notifier::verify()` is ready.
+- Email footers read the Settings values `seller_name` and `support_email`, with placeholders until they are set.
+- The email logo is a PNG (`public/assets/mark.png`) because many mail clients block SVG.
+- `php scripts/make-brand-assets.php` redraws `public/brand/*` (icons, logo lockups, social cards, WordPress.org banners) with GD and Segoe UI.
+- Paddle still needs an account, price ids and checkout wiring.

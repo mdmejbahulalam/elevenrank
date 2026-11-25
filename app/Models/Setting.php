@@ -14,7 +14,11 @@ class Setting extends Model
 
     public static function get(string $key, ?string $default = null): ?string
     {
-        return static::find($key)?->value ?? $default;
+        try {
+            return static::find($key)?->value ?? $default;
+        } catch (\Throwable) {
+            return $default; // before the migration has run, mail and pages must still work
+        }
     }
 
     public static function put(string $key, ?string $value): void

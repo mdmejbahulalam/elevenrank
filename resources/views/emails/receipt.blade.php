@@ -1,7 +1,14 @@
 @extends('emails.layout')
-@section('subject', "Your ElevenRank receipt, order ".$number."")
-@section('preview', "Thank you. Your receipt and licence key are inside.")
+@section('subject', "Your ElevenRank receipt, order ".$number)
+@section('preview', "Thank you. Your receipt is inside.")
 @section('heading', "Thank you for your order")
 @section('body')
-<p style="margin:0 0 16px">Order {{ $number }}: {{ $plan }}, {{ $amount }}. A PDF invoice is in your account.</p><p style="margin:0 0 6px;font-size:13px;color:#475467">Your licence key</p><div style="margin:0 0 20px;padding:12px 14px;border:1px solid #667085;border-radius:8px;background:#eef0f4;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;word-break:break-all">{{ $key }}</div><div style="margin:0 0 20px;padding:14px 16px;border-radius:12px;background:#e8f1fe;border:1px solid #175cd3;font-size:14px;line-height:20px"><strong>3 steps.</strong> Install the free plugin, upload the Pro zip, then paste the key under ElevenRank, Licence.</div><p style="margin:0 0 20px"><a href="{{ $url }}" style="display:inline-block;padding:12px 24px;border-radius:8px;background:#4338ca;color:#ffffff;text-decoration:none;font-weight:600">Download Pro</a></p><p style="margin:0 0 16px"><span style="font-size:14px;color:#475467">14-day refund. Reply to this email if you need one.</span></p>
+<p style="margin:0 0 20px">Here is your receipt for order {{ $number }}. A PDF invoice is in your account.</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;font-size:16px">
+<tr><td style="padding:12px 0;border-bottom:1px solid #e4e7ec">{{ $item ?? 'ElevenRank Pro, '.$plan }}</td><td align="right" style="padding:12px 0;border-bottom:1px solid #e4e7ec">{{ $amount }}</td></tr>
+<tr><td style="padding:12px 0;border-bottom:1px solid #e4e7ec;color:#475467">Tax</td><td align="right" style="padding:12px 0;border-bottom:1px solid #e4e7ec;color:#475467">[from provider]</td></tr>
+<tr><td style="padding:12px 0;font-weight:700">Total</td><td align="right" style="padding:12px 0;font-weight:700">{{ $amount }}</td></tr>
+</table>
+@include('emails.button', ['url' => $invoiceUrl ?? $url, 'label' => 'View invoice'])
+@include('emails.small', ['text' => '14-day refund. Reply to this email if you need one.'])
 @endsection

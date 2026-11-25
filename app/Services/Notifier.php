@@ -29,13 +29,24 @@ class Notifier
 
     public function receipt(Order $order): void
     {
-        $this->send($order->user->email, 'receipt', 'Your ElevenRank receipt, order '.$order->number, [
-            'number' => $order->number,
-            'plan' => $order->plan->name,
-            'amount' => $order->amount(),
-            'key' => $order->licence?->license_key ?? '',
-            'url' => url('/account/downloads'),
-        ]);
+        $plan = $order->plan;
+        $item = 'ElevenRank Pro, '.$plan->name.($plan->sites ? ' ('.$plan->sites.' '.($plan->sites === 1 ? 'site' : 'sites').')' : '').($plan->months ? ', '.$plan->months.' months' : '');
+        $key = $order->licence?->license_key ?? '';
+        $vars = [
+            'number' => $order->number, 'plan' => $plan->name, 'item' => $item, 'summary' => $plan->name.($plan->sites ? ', '.$plan->sites.' '.($plan->sites === 1 ? 'site' : 'sites') : ''), 'amount' => $order->amount(), 'key' => $key,
+            'date' => $order->licence?->expires?->format('j M Y'), 'url' => url('/account/downloads'), 'invoiceUrl' => url('/account/orders/'.$order->number),
+        ];
+        $this->send($order->user->email, 'receipt', 'Your ElevenRank receipt, order '.$order->number, $vars);
+
+        if ($key !== '') {
+            $this->send($order->user->email, 'licence', 'Your ElevenRank Pro licence key', $vars);
+        }
+    }
+
+    /** The "confirm your email" message. Sent only when email confirmation is switched on. */
+    public function verify(User $user, string $url): void
+    {
+        $this->send($user->email, 'verify', 'Confirm your email for ElevenRank', ['name' => $user->name, 'url' => $url]);
     }
 
     public function refund(Order $order): void
@@ -63,6 +74,6 @@ class Notifier
     public function term(Licence $licence, string $kind): void
     {
         $subjects = ['renewal30' => 'Your ElevenRank term ends in 30 days', 'renewal7' => 'Your ElevenRank term ends in 7 days', 'expired' => 'Your ElevenRank term has ended'];
-        $this->send($licence->email, $kind, $subjects[$kind], ['date' => $licence->expires?->format('j M Y'), 'url' => url('/pricing'), 'name' => $licence->email]);
+        $this->send($licence->email, $kind, $subjects[$kind], ['date' => $licence->expires?->format('j M Y'), 'url' => url('/pricing'), 'name' => $licence->email, 'plan' => $licence->plan?->name ?? 'Pro', 'months' => $licence->plan?->months ?: 12]);
     }
 }
