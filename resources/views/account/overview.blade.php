@@ -6,13 +6,16 @@ $first = $licences->first();
 $ended = $first && $first->status === 'active' && $first->isExpired();
 $revoked = $first && $first->status !== 'active';
 $pct = $first && $first->site_limit ? min(100, round($first->activations_count / $first->site_limit * 100)) : 0;
+$soon = $first && $first->status === "active" && $first->expires && ! $first->isExpired() && $first->expires->lte(now()->addDays(30));
 @endphp
 <p class="a-eyebrow">Overview</p>
 <h1>Welcome back, {{ strtok(auth()->user()->name, " ") }}</h1>
 <p class="a-sub">Your ElevenRank Pro licence, downloads and support in one place.</p>
 <div class="a-stack">
-	@if ($first && ! $hasSite && ! $revoked && ! $ended)
+	@if ($first && ! $hasSite && ! $revoked && ! $ended && ! $soon)
 		<div class="a-alert info" role="status"><div><strong>Your licence is ready.</strong> Download Pro, install it, then paste your key to activate.</div></div>
+	@elseif ($soon)
+		<div class="a-alert warn" role="status"><div><strong>Your term ends soon.</strong> Pro keeps working either way. Renew to keep updates and support.</div></div>
 	@elseif ($ended)
 		<div class="a-alert info" role="status"><div><strong>Pro keeps working on your sites.</strong> Updates and support have stopped. Renew to get them back.</div></div>
 	@elseif ($revoked)
@@ -28,6 +31,7 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 				<div><p class="a-eyebrow">Licence</p><h2 style="margin:0">{{ $l->label ?: (($l->plan?->name ?? "ElevenRank Pro").($l->site_limit ? ", ".$l->site_limit." ".str('site')->plural($l->site_limit) : "")) }}</h2></div>
 				@if ($l->status !== 'active')<span class="a-pill bad">Revoked</span>
 				@elseif ($l->isExpired())<span class="a-pill info">Term ended</span>
+				@elseif ($l->expires && $l->expires->lte(now()->addDays(30)))<span class="a-pill warn">Ends in {{ max(0, (int) now()->startOfDay()->diffInDays($l->expires->copy()->startOfDay())) }} days</span>
 				@elseif ($l->activations_count === 0)<span class="a-pill info">Ready to activate</span>
 				@else<span class="a-pill ok">Active</span>@endif
 			</div>
@@ -40,13 +44,13 @@ $pct = $first && $first->site_limit ? min(100, round($first->activations_count /
 				</div>
 				<div>
 					<p class="a-small a-muted" style="margin:0 0 6px">Updates and support</p>
-					<p class="a-h3" style="margin:0">@if (! $l->expires) No expiry @elseif ($l->isExpired()) Ended {{ $l->expires->format('j M Y') }} @else Until {{ $l->expires->format('j M Y') }} @endif</p>
+					<p class="a-h3" style="margin:0">@if (! $l->expires) No expiry @elseif ($l->isExpired()) Ended {{ $l->expires->format('j M Y') }} @elseif ($l->expires->lte(now()->addDays(30))) Ends {{ $l->expires->format("j M Y") }} @else Until {{ $l->expires->format("j M Y") }} @endif</p>
 				</div>
 			</div>
 			<div class="a-row" style="margin-top:20px">
 				@if ($l->status === 'active')<a class="a-btn primary" href="/account/downloads">Download Pro{{ $version ? " ".$version : "" }}</a>@endif
 				<a class="a-btn secondary" href="/account/licences">Manage sites</a>
-				@if ($l->status !== 'active' || $l->isExpired())<a class="a-btn primary" href="/pricing">Renew licence</a>@endif
+				@if ($l->status !== 'active' || $l->isExpired() || ($l->expires && $l->expires->lte(now()->addDays(30))))<a class="a-btn secondary" href="/pricing">Renew licence</a>@endif
 			</div>
 		</section>
 		@endforeach

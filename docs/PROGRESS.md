@@ -146,3 +146,15 @@ Not done: dark and mobile Home not compared pixel by pixel; other pages only che
 Compared every page against the PNG export at 1440px (light), plus dark Home and the mobile menu. Fixed: footer links (all pages), Pricing (price note, refund text, forum cell, tax FAQ), Compare (section and button), Support (cards and form), About (person card), Changelog (version, pill, date), Home (icons, switching row, spacing), mobile menu and footer. Docs is now 11 pages in four groups (config/docs.php) with search across pages, TOC, copy button and previous/next.
 
 Not done: Blog post PNG not compared (no posts exist); Pricing dark and Home mobile only checked for overflow; the three Pro and WP-CLI docs pages are drafts (noindex); Hooks page not restyled.
+
+## Account pages matched to the PNG export
+
+Done: Overview (first name, plan title, expiring warning, Latest release card), Licences (table with activated and last check, free-slot rows, deactivate confirm modal, upgrade note), Downloads (install steps, free plugin card, earlier versions table), Orders (invoice column), Order and invoice (invoice card, print to PDF, refund button), pending-payment page, Checkout (plan choice, billing details with country saved, order summary), Tickets (list, new ticket with topic and site, thread with Mark as solved), Profile (details with billing address, separate password form, delete account with active-licence guard), Sign in (Remember me), Create account (no repeat-password field), Reset password (inline confirmation). Migration adds users.billing_address and billing_country.
+
+Not done:
+- Download PDF uses the browser print dialog, there is no server-side PDF.
+- Earlier-versions table shows version only (no date, size or direct download); older zips are asked for through support.
+- Latest release card has no release date or notes (the release metadata does not store them).
+- Checkout still creates a pending order; there is no payment provider redirect yet.
+- Deleting an account cascades to its orders; decide on retention for accounting before launch.
+- Reset-password (token) page, the States reference sheet and Top bar / Sidebar sheets were not compared in detail.
