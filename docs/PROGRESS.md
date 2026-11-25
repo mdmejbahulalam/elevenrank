@@ -126,3 +126,7 @@
 ## Account pages matched to the canvas
 - Licences, Downloads, Orders, Support (tickets) and Profile follow the Account canvas boards. 56 tests pass.
 - Not done: sign-in, register, forgot/reset password, checkout, order and invoice detail, ticket thread, deactivate confirmation, delete account; all staff pages beyond Overview; signed-in pages not viewed in a browser.
+
+## Account detail pages matched
+- Sign-in layout (used by register, forgot, reset and staff sign-in), order, ticket thread and checkout follow the Account canvas. 56 tests pass; sign-in page checked in the browser.
+- Not done: invoice page keeps its own print styling; no deactivate-confirm, delete-account, billing-address or payment-provider pages; signed-in pages not viewed in a browser; all staff pages beyond Overview.

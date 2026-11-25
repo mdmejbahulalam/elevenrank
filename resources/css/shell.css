@@ -78,3 +78,14 @@ a.a-btn.ghost { color: var(--accent); padding: 0 12px; }
 .h-stat .n { font: 700 28px/36px var(--font); font-variant-numeric: tabular-nums; margin: 0; }
 .h-stat .l { font: 500 14px/20px var(--font); color: var(--muted); margin: 0; }
 .h-stat .l a { color: var(--muted); }
+/* sign-in pages and detail views */
+.a-auth { min-height: 100vh; display: grid; place-items: center; padding: 48px 16px; }
+.a-auth .box { width: 100%; max-width: 420px; }
+.a-auth .a-brand { justify-content: center; margin-bottom: 24px; }
+.a-auth h1 { font: 600 20px/28px var(--font); }
+.a-msg { border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; background: var(--surface); max-width: 640px; }
+.a-msg.staff { background: var(--accent-soft); margin-left: auto; }
+.a-msg .who { font: 600 12px/16px var(--font); color: var(--muted); margin: 0 0 6px; letter-spacing: .04em; text-transform: uppercase; }
+.a-empty { text-align: center; padding: 40px 20px; }
+.a-empty .ic { width: 48px; height: 48px; border-radius: var(--r-md); background: var(--accent-soft); color: var(--accent-dark); display: grid; place-items: center; margin: 0 auto 16px; }
+.a-empty .ic svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
