@@ -134,3 +134,9 @@
 ## Staff list pages matched
 - Customers, Orders, Tickets and Audit log follow the HQ boards (eyebrow header, status chips, canvas table density); staff tables and cards share the canvas look. 56 tests pass.
 - Not done: customer detail (two-column with details and staff note), licence detail, order detail with refund modal, ticket thread, new release form, Plans, Releases, Licences and System pages only get the shared table and card look; Staff, Webhooks and Settings pages do not exist; signed-in pages not viewed in a browser.
+
+## Home matched to updated canvas PNGs, with motion
+
+Home rebuilt to the new export (trust strip, switching row, Free vs Pro cards, three steps, privacy block, FAQ, CTA), page height 5077 vs 5078 px. Scroll reveal, card lift, floating hero mockup, FAQ chevron (all off under reduced motion).
+
+Not done: dark and mobile Home not compared pixel by pixel; other pages only checked by height and structure.

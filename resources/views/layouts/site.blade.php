@@ -69,6 +69,7 @@ $nav = [['/features', 'Features', 'features'], ['/pro', 'Pro', 'pro'], ['/pricin
 		<p class="legal">© {{ date('Y') }} ElevenRank. WordPress is a trademark of the WordPress Foundation; ElevenRank is not affiliated with it.</p>
 	</div>
 </footer>
+<script>document.documentElement.classList.add("js");</script>
 <script src="/assets/app.js" defer></script>
 </body>
 </html>

@@ -35,3 +35,17 @@
     });
   }
 })();
+
+/* Scroll reveal. Elements stay visible if this does not run (the .js class is set inline). */
+(function () {
+  var els = document.querySelectorAll('.rv');
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    els.forEach(function (e) { e.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (list) {
+    list.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(function (e) { io.observe(e); });
+})();

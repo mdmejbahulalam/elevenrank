@@ -134,3 +134,38 @@ a.s-pill { text-decoration: none; }
 .s-404 .s-search { margin: 24px auto; }
 .s-callout { border: 1px solid var(--info); background: var(--info-soft); border-radius: var(--r-md); padding: 24px; }
 .s-callout p { color: var(--ink); margin: 0; }
+
+/* Home, matched to the updated canvas */
+.s-trust { background: var(--surface); border-bottom: 1px solid var(--line); padding: 48px 0; }
+.s-trio { display: grid; gap: 32px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.s-trio p { margin: 4px 0 0; color: var(--muted); font-size: 15px; line-height: 22px; }
+.s-grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.s-switch { display: flex; gap: 32px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.s-switch > div:first-child { max-width: 620px; }
+.s-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.s-card.feat { border: 2px solid var(--accent); }
+.s-privacy { max-width: 900px; margin: 0 auto; padding: 32px; }
+.s-privacy .s-d-m { margin-bottom: 8px; }
+.s-faq details summary { list-style: none; }
+.s-faq details summary::-webkit-details-marker { display: none; }
+.s-faq details summary::before { content: "\25B8"; display: inline-block; margin-right: 10px; transition: transform .2s ease; }
+.s-faq details[open] summary::before { transform: rotate(90deg); }
+@media (max-width: 900px) { .s-trio, .s-grid3 { grid-template-columns: 1fr; } .s-trust { padding: 32px 0; } }
+
+/* Motion: reveal on scroll, gentle lifts. Off when the visitor prefers less motion. */
+.js .rv { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.js .rv.d1 { transition-delay: .08s; }
+.js .rv.d2 { transition-delay: .16s; }
+.js .rv.in { opacity: 1; transform: none; }
+.s-card, .s-btn { transition: transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease; }
+.s-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-float); }
+.s-btn:hover { transform: translateY(-1px); }
+.s-btn:active { transform: translateY(0); }
+.s-shot { animation: s-float 7s ease-in-out infinite; }
+.s-step::before { transition: transform .3s ease; }
+.s-step:hover::before { transform: scale(1.12); }
+.s-pill.ok { animation: s-pulse 2.6s ease-in-out infinite; }
+@keyframes s-float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+@keyframes s-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(19,128,77,0); } 50% { box-shadow: 0 0 0 5px rgba(19,128,77,.12); } }
+@media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; } .s-shot, .s-pill.ok { animation: none; } }
+.s-head .s-brand span { display: inline-flex; gap: .3em; }
