@@ -122,3 +122,7 @@
 ## Account and HQ shell matched to the canvases
 - Shared signed-in shell (top bar with avatar, role and sign-out; sidebar; cards, pills, alerts, meters, tables) in resources/css/shell.css; account Overview (licence card, get started, summary cards) and HQ Overview (stats, needs attention) rebuilt. 56 tests pass.
 - Not done: the other account and HQ pages (licences, downloads, orders, invoice, tickets, profile, sign-in/register/forgot, customers, licences, orders, releases, plans, audit, system, two-factor) still use the earlier component styling inside the new shell; not yet compared board by board; signed-in pages not viewed in a browser. HQ boards for Staff, Webhooks and Settings have no pages yet.
+
+## Account pages matched to the canvas
+- Licences, Downloads, Orders, Support (tickets) and Profile follow the Account canvas boards. 56 tests pass.
+- Not done: sign-in, register, forgot/reset password, checkout, order and invoice detail, ticket thread, deactivate confirmation, delete account; all staff pages beyond Overview; signed-in pages not viewed in a browser.
