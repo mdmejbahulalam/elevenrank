@@ -110,3 +110,7 @@
 - New marketing header and footer (brand, nav, mobile menu, Company column) and a rebuilt homepage following the Site canvas home board: split hero with a dashboard mockup, feature cards with icons, steps, Free/Pro split, FAQ, closing call to action. Styles live in resources/css/home.css (`.s-*`) and are bundled into site.css.
 - Checked in the browser in light, dark and mobile widths; 53 tests pass.
 - Not done: the hero mockup is a labelled placeholder wireframe (a real screenshot is still needed); Blog and "Switching from Yoast" links omitted because those pages do not exist; Features, Pro, Pricing and other pages keep their older layout inside the new header and are not yet compared with their canvas boards.
+
+## Marketing pages matched to the Site canvas
+- Features, Pro, Pricing, Docs, Changelog, Support, About, legal pages and the 404 page now follow the canvas boards (styles in resources/css/home.css). 53 tests pass.
+- Not done: Hooks page keeps its older layout; Blog, Blog post and Compare boards have no pages yet; screenshots are placeholders; account, admin and sign-in pages are not matched (no canvas read for them); checked visually only in a small browser pane.

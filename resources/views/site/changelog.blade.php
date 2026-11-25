@@ -10,20 +10,29 @@ $releases = [
 ];
 @endphp
 @section('content')
-<div class="wrap page narrow">
-	<h1>Changelog</h1>
-	<p class="filter" aria-label="Filter by product">Show:
-		@foreach (['all' => 'All', 'free' => 'Free plugin', 'pro' => 'Pro'] as $k => $label)
-			<a href="/changelog{{ $k === 'all' ? '' : '?product='.$k }}" @if($product === $k) aria-current="true" style="font-weight:700" @endif>{{ $label }}</a>@if(! $loop->last) · @endif
-		@endforeach
-	</p>
-	@foreach ($releases as $r)
-		@if ($product === 'all' || $product === $r['product'])
-			<section id="{{ $r['product'] }}-{{ str_replace('.', '-', $r['version']) }}">
-				<h2>{{ $r['product'] === 'pro' ? 'ElevenRank Pro' : 'ElevenRank (free)' }} {{ $r['version'] }} @if ($r['note'])<x-badge>{{ $r['note'] }}</x-badge>@endif</h2>
-				<ul>@foreach ($r['items'] as $i)<li>{{ $i }}</li>@endforeach</ul>
-			</section>
-		@endif
-	@endforeach
-</div>
+<section class="s-sec" style="padding-bottom:24px">
+	<div class="s-wrap s-narrow">
+		<p class="s-eyebrow">Changelog</p>
+		<h1 class="s-d-xl" style="font-size:clamp(34px,5vw,44px)">What changed, release by release</h1>
+		<div class="s-row" style="margin-top:16px" aria-label="Filter by product">
+			<a class="s-pill @if($product==='all') on @endif" href="/changelog" @if($product==='all') aria-current="true" @endif>All</a>
+			<a class="s-pill ok" href="/changelog?product=free" @if($product==='free') aria-current="true" style="outline:2px solid var(--ok)" @endif>Free plugin</a>
+			<a class="s-pill info" href="/changelog?product=pro" @if($product==='pro') aria-current="true" style="outline:2px solid var(--info)" @endif>Pro</a>
+		</div>
+	</div>
+</section>
+<section class="s-sec" style="padding-top:24px">
+	<div class="s-wrap s-narrow">
+		<div class="s-rel">
+			@foreach ($releases as $r)
+				@if ($product === 'all' || $product === $r['product'])
+					<div id="{{ $r['product'] }}-{{ str_replace('.', '-', $r['version']) }}">
+						<h2 class="s-h" style="margin:0">{{ $r['product'] === 'pro' ? 'ElevenRank Pro' : 'ElevenRank (free)' }} {{ $r['version'] }} <span class="s-pill {{ $r['product'] === 'pro' ? 'info' : 'ok' }}" style="margin-left:8px">{{ $r['note'] ?? ($r['product'] === 'pro' ? 'Pro' : 'Free plugin') }}</span></h2>
+						<ul style="margin-top:12px">@foreach ($r['items'] as $i)<li>{{ $i }}</li>@endforeach</ul>
+					</div>
+				@endif
+			@endforeach
+		</div>
+	</div>
+</section>
 @endsection

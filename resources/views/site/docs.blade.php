@@ -14,64 +14,75 @@ $faq = [
 ];
 @endphp
 @section('content')
-<div class="wrap page">
-	<h1>Documentation</h1>
-	<p class="sub">Short answers for the free plugin and ElevenRank Pro. Developers: see the <a href="/docs/hooks">hooks reference</a>. Last updated 25 November 2026.</p>
-	<div class="with-toc">
-		<nav class="toc" aria-label="Documentation">
-			<label for="doc-search" style="margin:0 0 4px">Search the docs</label>
-			<input id="doc-search" type="search" placeholder="Type a word" autocomplete="off">
-			<a href="#getting-started">Getting started</a>
-			<a href="#installing-pro">Installing Pro</a>
-			<a href="#common-questions">Common questions</a>
-			<a href="/docs/hooks">Developer hooks</a>
-		</nav>
-		<div id="doc-body">
-			<section id="getting-started">
-				<h2 style="margin-top:0">Getting started</h2>
-				<ol>
-					<li>Upload the <code>elevenrank</code> folder to <code>/wp-content/plugins/</code>, or install it from the Plugins screen.</li>
-					<li>Activate it. A short setup wizard checks your site title, tagline and search engine visibility.</li>
-					<li>Open <strong>ElevenRank &gt; Titles &amp; Meta</strong> to review how titles and descriptions are built.</li>
-				</ol>
-			</section>
-			<section id="installing-pro">
-				<h2>Installing ElevenRank Pro</h2>
-				<ol>
-					<li>Buy a licence and sign in to your <a href="/account">account</a>.</li>
-					<li>Download ElevenRank Pro from <strong>Downloads</strong>. It is delivered only to accounts with a licence.</li>
-					<li>Upload and activate it next to the free plugin.</li>
-					<li>Open <strong>ElevenRank &gt; Pro licence</strong>, paste your key and activate. Your site address is registered against the key.</li>
-				</ol>
-				<p>Moving a site: deactivate it in the plugin or in your account, then activate the new one.</p>
-			</section>
-			<section id="common-questions">
-				<h2>Common questions</h2>
-				@foreach ($faq as [$q, $a])
-					<details><summary>{{ $q }}</summary><p>{{ $a }}</p></details>
-				@endforeach
-			</section>
-			<p id="doc-none" hidden class="muted">No matching section. Try another word, or <a href="/support">contact support</a>.</p>
-			<p style="margin-top:24px">Still stuck? <a href="/support">Contact support</a>.</p>
-		</div>
-	</div>
+<div class="s-wrap" style="padding-top:32px">
+	<form class="s-search" role="search" onsubmit="return false"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg><input id="doc-search" type="search" name="q" placeholder="Search the docs" autocomplete="off" value="{{ request('q') }}" aria-label="Search the docs"></form>
+</div>
+<div class="s-wrap s-docs">
+	<nav class="tree" aria-label="Documentation">
+		<h4>Start</h4>
+		<a class="on" href="#getting-started">Getting started</a>
+		<a href="#installing-pro">Installing Pro</a>
+		<h4>Help</h4>
+		<a href="#common-questions">Common questions</a>
+		<a href="/support">Support</a>
+		<h4>Developers</h4>
+		<a href="/docs/hooks">Hooks and filters</a>
+	</nav>
+	<article class="s-prose" id="doc-body">
+		<p class="s-meta">Documentation · Updated 25 November 2026</p>
+		<h1>Documentation</h1>
+		<p>Short answers for the free plugin and ElevenRank Pro.</p>
+		<section id="getting-started">
+			<h2>Getting started</h2>
+			<ol>
+				<li>Upload the <code>elevenrank</code> folder to <code>/wp-content/plugins/</code>, or install it from the Plugins screen.</li>
+				<li>Activate it. A short setup wizard checks your site title, tagline and search engine visibility.</li>
+				<li>Open <strong>ElevenRank &gt; Titles &amp; Meta</strong> to review how titles and descriptions are built.</li>
+			</ol>
+		</section>
+		<section id="installing-pro">
+			<h2>Installing ElevenRank Pro</h2>
+			<ol>
+				<li>Buy a licence and sign in to your <a href="/account">account</a>.</li>
+				<li>Download ElevenRank Pro from <strong>Downloads</strong>. It is delivered only to accounts with a licence.</li>
+				<li>Upload and activate it next to the free plugin.</li>
+				<li>Open <strong>ElevenRank &gt; Pro licence</strong>, paste your key and activate. Your site address is registered against the key.</li>
+			</ol>
+			<p>Moving a site: deactivate it in the plugin or in your account, then activate the new one.</p>
+		</section>
+		<section id="common-questions">
+			<h2>Common questions</h2>
+			<div class="s-faq">
+			@foreach ($faq as [$q, $a])
+				<details><summary>{{ $q }}</summary><p>{{ $a }}</p></details>
+			@endforeach
+			</div>
+		</section>
+		<p id="doc-none" hidden class="s-muted">No matching section. Try another word, or <a href="/support">contact support</a>.</p>
+		<p style="margin-top:24px">Still stuck? <a href="/support">Contact support</a>.</p>
+	</article>
+	<aside class="toc" aria-label="On this page">
+		<p class="s-meta" style="margin:0 0 8px">On this page</p>
+		<a href="#getting-started">Getting started</a><a href="#installing-pro">Installing Pro</a><a href="#common-questions">Common questions</a>
+	</aside>
 </div>
 <script>
 (function () {
 	var box = document.getElementById('doc-search');
 	if (!box) return;
-	var parts = document.querySelectorAll('#doc-body section, #doc-body details');
 	var none = document.getElementById('doc-none');
-	box.addEventListener('input', function () {
+	function run() {
 		var q = box.value.trim().toLowerCase(), shown = 0;
-		document.querySelectorAll('#doc-body > section').forEach(function (s) {
+		document.querySelectorAll('#doc-body section').forEach(function (s) {
 			var any = !q || s.textContent.toLowerCase().indexOf(q) > -1;
 			s.hidden = !any;
 			if (any) shown++;
 			s.querySelectorAll('details').forEach(function (d) { d.hidden = !!q && d.textContent.toLowerCase().indexOf(q) === -1; if (q && !d.hidden) d.open = true; });
 		});
 		none.hidden = shown > 0;
-	});
+	}
+	box.addEventListener('input', run);
+	if (box.value) run();
 })();
 </script>
 @endsection

@@ -2,18 +2,27 @@
 @section('title', 'Support')
 @section('description', 'Get help with ElevenRank: documentation, community support for the free plugin, and tickets for Pro customers.')
 @section('content')
-<div class="wrap page narrow">
-	<h1>Support</h1>
-	<div class="grid" style="margin-top:20px">
-		<div class="card"><h3>Documentation</h3><p>Setup, importing and common questions. <a href="/docs">Read the docs</a>.</p></div>
-		<div class="card"><h3>Pro customers</h3><p>Open a ticket from your account and we reply there. <a href="/account/tickets">Open a ticket</a>.</p></div>
+<section class="s-sec" style="padding-bottom:32px">
+	<div class="s-wrap s-narrow">
+		<p class="s-eyebrow">Support</p>
+		<h1 class="s-d-xl" style="font-size:clamp(34px,5vw,44px)">How can we help?</h1>
+		<p class="s-lead">Search the docs first. Most answers are there.</p>
+		<form class="s-search" role="search" action="/docs" method="get"><svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg><input type="search" name="q" placeholder="Search the docs" aria-label="Search the docs"></form>
 	</div>
-	<h2>Free plugin</h2>
-	<p>Free-plugin questions are answered on the WordPress.org support forum for ElevenRank once the plugin is listed there.</p>
-	<h2>Before you write</h2>
-	<ul>
-		<li>Tell us the plugin and WordPress versions (ElevenRank &gt; Status has a debug text you can copy; it contains no addresses, keys or e-mails).</li>
-		<li>Describe what you expected and what happened.</li>
-	</ul>
-</div>
+</section>
+<section class="s-sec alt" style="padding:48px 0">
+	<div class="s-wrap">
+		<div class="s-grid">
+			<div class="s-card"><h2 class="s-h">Documentation</h2><p>Setup, importing and common questions.</p><p style="margin-top:16px"><a class="s-btn secondary" href="/docs">Read the docs</a></p></div>
+			<div class="s-card"><h2 class="s-h">Free plugin</h2><p>Free-plugin questions are answered on the WordPress.org support forum once the plugin is listed there.</p></div>
+			<div class="s-card"><h2 class="s-h">Pro customers</h2><p>Sign in and open a ticket tied to your licence. We reply there.</p><p style="margin-top:16px"><a class="s-btn primary" href="/account/tickets">Open a ticket</a></p></div>
+		</div>
+	</div>
+</section>
+<section class="s-sec" style="padding:56px 0">
+	<div class="s-wrap s-narrow">
+		<h2 class="s-d-m">Before you write</h2>
+		<p class="s-muted">Include your site address, WordPress and PHP versions and the debug text from ElevenRank, then Status. It contains no addresses, keys or emails. Describe what you expected and what happened.</p>
+	</div>
+</section>
 @endsection
